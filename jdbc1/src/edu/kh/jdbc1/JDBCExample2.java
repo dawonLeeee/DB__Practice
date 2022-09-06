@@ -1,6 +1,7 @@
 package edu.kh.jdbc1;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,30 +36,23 @@ public class JDBCExample2 {
 		 * 4단계 : 사용한 JDBC 자원 반납
 		 */
 		
-		
 		Scanner sc = new Scanner(System.in);
-		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			
-			String type = "jdbc:oracle:thin:@";
+			Class.forName("Oracle.jdbc.driver.OracleDriver");
+			String type = "jdbc:oracle:this:@";
 			String ip = "localhost";
 			String port = ":1521";
-			String sid =  ":XE";
+			String sid = ":XE";
 			String user = "kh_ldw";
 			String pw = "kh1234";
 			
 			conn = DriverManager.getConnection(type + ip + port + sid, user, pw);
-			System.out.print("급여 입력 : ");
-			int input = sc.nextInt();
-			sc.nextLine();
 			
-			String sql = 
-					"SELECT EMP_ID, EMP_NAME, SALARY FROM EMPLOYEE WHERE SALARY > " + input;
+			String sql = "SELECT EMP_ID, EMP_NAME, SALARY, HIRE_DATE FROM EMPLOYEE";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
 			
@@ -66,87 +60,29 @@ public class JDBCExample2 {
 				String empId = rs.getString("EMP_ID");
 				String empName = rs.getString("EMP_NAME");
 				int salary = rs.getInt("SALARY");
+				Date hireDate = rs.getDate("HIRE_DATE");
 				
-				System.out.printf("사번 : %s / 이름 : %s / 급여 : %d\n", 
-		 				empId, empName, salary);
+				System.out.printf("사번 : %s | 이름 : %s | 급여 : %d | 입사일 : %s\n", empId, empName, salary, hireDate.toString());
+
 			}
 			
-
-		} catch (ClassNotFoundException e) {
+			
+			
+			
+		} catch (ClassNotFoundException  e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			System.out.println("드라이버 경로가 잘못되었습니다.");
+		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
 				if(rs != null) rs.close();
 				if(stmt != null) stmt.close();
 				if(conn != null) conn.close();
-			} catch (SQLException e) {
+			} catch(SQLException e) {
 				e.printStackTrace();
 			}
-		
 		}
 		
-//		Scanner sc = new Scanner(System.in);
-//		
-//		//1단계 : JDBC객체 참조변수 생성
-//		Connection conn = null;
-//		Statement stmt = null;
-//		ResultSet rs = null;
-//		
-//		
-//		
-//		try {
-//			// 2단계 : 참조변수에 알맞은 객체 대입
-//			Class.forName("oracle.jdbc.driver.OracleDriver");
-//			String type = "jdbc:oracle:thin:@";
-//			String ip = "localhost";
-//			String port = ":1521";
-//			String sid = ":XE";
-//			String user = "kh_ldw";
-//			String pw = "kh1234";
-//			
-//			conn = DriverManager.getConnection(type + ip + port + sid, user, pw);
-//			
-//			//입력받은 급여보다 많이 받는(초과) 직원만 조회
-//			System.out.print("급여 입력 >>");
-//			int input = sc.nextInt();
-//			sc.nextLine();
-//			
-//			String sql = "SELECT EMP_ID, EMP_NAME, SALARY FROM EMPLOYEE WHERE SALARY > " + input;
-//			// >뒤에 띄어쓰기 하나 넣어주기(에러 방지)
-//			
-//			stmt = conn.createStatement(); 
-//			rs = stmt.executeQuery(sql);
-//			
-//			
-//			// 3e단계 : sql을 수행해서 반환받은 값(ResultSet)을 한 행씩 접근해서 컬럼값 얻어오기
-//			while(rs.next()) {
-//				String empId = rs.getString("EMP_ID");
-//				String empName = rs.getString("EMP_NAME");
-//				int salary = rs.getInt("SALARY");
-//				
-//				System.out.printf("사번 : %s | 이름 : %s | 급여 : %d\n", 
-//		 				empId, empName, salary);
-//			}
-//			
-//		} catch (ClassNotFoundException e) {
-//			System.out.println("2단계에서 오타");
-//			
-//		}  catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			
-//				try {
-//					if(rs != null) rs.close();
-//					if(stmt != null) stmt.close();
-//					if(conn != null) conn.close();
-//				} catch (SQLException e) {
-//					e.printStackTrace();
-//				}
-//		}
 	}
 }
