@@ -53,10 +53,12 @@ public class JDBCExample5 {
 					+ "FROM EMPLOYEE e \r\n"
 					+ "WHERE HIRE_DATE > '" + newHireDate + "'"
 					+ "ORDER BY TO_CHAR(HIRE_DATE, 'YYYY\"년\" MM\"월\" DD\"일\"')";
+			// 문자열 내부에 쌍따옴표 작성시 \"로 작성해야 한다(Escape문자)
 			rs = stmt.executeQuery(sql);
 			
 			List<Emp3> list = new ArrayList<>();
 			while(rs.next()) {
+	
 				list.add(new Emp3(rs.getString("EMP_NAME"), rs.getString("HIREDATE"), rs.getString("SEX")));
 			}
 			
