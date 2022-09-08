@@ -59,6 +59,8 @@ public class Employee {
 		this.departmentTitle = departmentTitle;
 		this.salary = salary;
 	}
+	
+
 
 	public int getEmpId() {
 		return empId;

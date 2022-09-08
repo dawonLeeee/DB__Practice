@@ -1,6 +1,8 @@
 package edu.kh.emp.view;
 
+import java.text.DecimalFormat;
 import java.util.InputMismatchException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,6 +34,7 @@ public class EmployeeView {
 				System.out.println("7. 입력 받은 급여 이상을 받는 모든 사원 정보 조회");
 				System.out.println("8. 부서별 급여 합 전체 조회");
 				System.out.println("9. 주민등록번호가 일치하는 사원 정보 조회");
+				System.out.println("10. 직급별 급여 평균 조회");
 				System.out.println("0. 프로그램 종료");
 				System.out.println();
 				
@@ -68,6 +71,9 @@ public class EmployeeView {
 				case 9 : // 사번이 일치하는 사원 정보 조회
 					selectEmpNo(); 	break;
 					
+				case 10 : // 직급별 급여 평균 조회
+					viewSalaryByjobName(); break;
+					
 				case 0 : // 프로그램 종료
 					System.out.println("==============[ 프로그램 종료 ]==============");
 					break;
@@ -85,6 +91,8 @@ public class EmployeeView {
 
 		} while(input != 0);
 	}
+
+
 
 
 	/**
@@ -236,11 +244,12 @@ public class EmployeeView {
 		printAll(empList);
 	}
 	
+	
 	/**
 	 * 7. 입력 받은 급여 이상을 받는 모든 사원 정보 조회
 	 */
 	public void viewImplBySalary() {
-System.out.println("<입력 받은 급여 이상을 받는 모든 사원 정보 조회>");
+		System.out.println("<입력 받은 급여 이상을 받는 모든 사원 정보 조회>");
 		
 		System.out.print("급여 입력 : ");
 		int inputSalary = sc.nextInt(); 
@@ -256,22 +265,33 @@ System.out.println("<입력 받은 급여 이상을 받는 모든 사원 정보 
 	 */
 	public void viewSalaryByDepartment() {
 
-
-		List<Employee> empList = dao.viewSalaryByDepartment();
-		printDeptAndSalary(empList);
+		LinkedHashMap<String, Double> salaryListByDept = dao.viewSalaryByDepartment();
+		printSalary(salaryListByDept);
 	}
 	
 	/**
-	 * 주민등록번호가 일치하는 사원 정보 조회
+	 * 9. 주민등록번호가 일치하는 사원 정보 조회
 	 */
 	public void selectEmpNo() {
 		System.out.println("<주민등록번호가 일치하는 사원 정보 조회>");
 		
+		System.out.print("주민번호 입력 : ");
 		sc.nextLine();
 		String empNo = sc.nextLine();
 		printOne(dao.selectEmpNo(empNo));
 		
 	}
+	
+
+	/**
+	 * 10. 직급별 급여 평균 조회
+	 */
+	private void viewSalaryByjobName() {
+		LinkedHashMap<String, Double> salaryListByJob = dao.viewSalaryByjobCode();
+		printSalary(salaryListByJob);
+		
+	}
+	
 // ---------------------------------------------------------------------
 	
 	/** 사원 정보 모두 출력
@@ -309,6 +329,20 @@ System.out.println("<입력 받은 급여 이상을 받는 모든 사원 정보 
 		}
 	}
 	
+	
+	public void printSalary(LinkedHashMap<String, Double> map) {
+		if(map == null) {
+			System.out.println("조회된 사원 정보가 없습니다.");
+			
+		} else {
+			DecimalFormat dcfmt = new DecimalFormat("#,##0");
+			
+			for(String s: map.keySet())
+				System.out.println(s + " / " + dcfmt.format(map.get(s)) + "원");
+			
+		}
+	}
+	
 	/** 사번을 입력받아 반환하는 메서드
 	 * @return
 	 */
@@ -327,9 +361,12 @@ System.out.println("<입력 받은 급여 이상을 받는 모든 사원 정보 
 		} else {
 			System.out.println("| 부서 | 급여" );
 			System.out.println("------------------------------------------------------------------------------------------------");
+			DecimalFormat dcfmt = new DecimalFormat("#,##0");
+			
+			
 			for(Employee emp : empList) { 
-				System.out.printf(" %5s | %d\n",
-						emp.getDepartmentTitle(), emp.getSalary());
+				System.out.printf(" %5s | %s\n",
+						emp.getDepartmentTitle(), dcfmt.format(emp.getSalary()));
 			}
 		}
 	}

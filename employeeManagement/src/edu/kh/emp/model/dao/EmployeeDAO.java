@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import edu.kh.emp.model.vo.Employee;
@@ -50,7 +51,7 @@ public class EmployeeDAO {
 	
 	
 
-	/** 사원 정보 추가 DAO
+	/** 1. 사원 정보 추가 DAO
 	 * @param emp
 	 * @return result(INSERT 성공한 행의 갯수 반환)
 	 */
@@ -122,11 +123,8 @@ public class EmployeeDAO {
 	}
 
 	
-	
-	
-	
-	
-	/** 전체 사원정보 조회 DAO
+
+	/** 2. 전체 사원정보 조회 DAO
 	 * @return Employee
 	 */
 	public List<Employee> selectAll() {
@@ -186,7 +184,7 @@ public class EmployeeDAO {
 	}
 
 	
-	/** 사번이 일치하는 사원 정보 조회 DAO
+	/** 3. 사번이 일치하는 사원 정보 조회 DAO
 	 * @param inputeEmpId
 	 * @return
 	 */
@@ -236,7 +234,102 @@ public class EmployeeDAO {
 		return emp;
 	}
 
-	/** 입력 받은 부서와 일치 모든 사원 정보 조회
+	
+	
+	
+	/**  4. 사번이 일치하는 사원 정보 수정 DAO
+	 * @param emp
+	 * @return
+	 */
+	public int updateEmployee(Employee emp) {
+		int result = 0;
+		
+		try {
+			Class.forName(driver);
+			
+			conn = DriverManager.getConnection(url, user, pw);
+			conn.setAutoCommit(false);
+			
+			String sql = "UPDATE EMPLOYEE SET "
+					+ "EMAIL = ?, PHONE = ?, SALARY = ? "
+					+ "WHERE EMP_ID = ?";
+			
+			//PreparedStatement 생성
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, emp.getEmail());
+			pstmt.setString(2, emp.getPhone());
+			pstmt.setInt(3, emp.getSalary());
+			pstmt.setInt(4, emp.getEmpId());
+			
+			result = pstmt.executeUpdate();
+			
+			if(result == 0) conn.rollback();
+			else			conn.commit();
+
+		} catch(Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		return result;
+	}
+
+	
+
+	/** 5. 사번이 일치하는 사원 정보 삭제 DAO
+	 * @param empId
+	 * @return
+	 */
+	public int deleteEmployee(int empId) {
+		int result = 0;
+		
+		try {
+			
+			Class.forName(driver);
+			
+			conn = DriverManager.getConnection(url, user, pw);
+			conn.setAutoCommit(false);
+			
+			String sql = "DELETE FROM EMPLOYEE "
+					+ "WHERE EMP_ID = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, empId);
+			
+			
+			result = pstmt.executeUpdate();
+			if(result != 0) conn.commit();
+			else 			conn.rollback();
+				
+			
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(conn != null) conn.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return result;
+	}
+
+	
+	/** 6. 입력 받은 부서와 일치 모든 사원 정보 조회 DAO
 	 * @param departmentTitle
 	 */
 	public List<Employee> viewDepartmentImpl(String departmentTitle) {
@@ -283,7 +376,10 @@ public class EmployeeDAO {
 		
 	}
 
-	/**입력 받은 급여 이상을 받는 모든 사원 정보 조회
+	
+	
+	
+	/**7. 입력 받은 급여 이상을 받는 모든 사원 정보 조회 DAO
 	 * @param inputSalary
 	 */
 	public List<Employee> viewImplBySalary(int inputSalary) {
@@ -329,8 +425,13 @@ public class EmployeeDAO {
 		return empList;
 	}
 
-	public List<Employee> viewSalaryByDepartment() {
-		List<Employee> empList = new ArrayList<>();
+	
+	
+	/**8. 부서별 급여 합 전체 조회 DAO
+	 * @return
+	 */
+	public LinkedHashMap<String, Double> viewSalaryByDepartment() {
+		LinkedHashMap<String, Double> salaryListByDept = new LinkedHashMap<>();
 		
 		try {
 			
@@ -338,16 +439,14 @@ public class EmployeeDAO {
 			
 			conn = DriverManager.getConnection(url, user, pw); 
 			stmt = conn.createStatement(); 
-			String sql = "SELECT DEPT_TITLE, SUM(SALARY)\r\n"
-					+ "FROM EMPLOYEE e \r\n"
-					+ "JOIN DEPARTMENT ON(DEPT_ID = DEPT_CODE)\r\n"
-					+ "GROUP BY DEPT_TITLE";
+			String sql = "SELECT DEPT_TITLE, ROUND(AVG(SALARY), 1) SALARY\r\n"
+			+ "FROM EMPLOYEE e \r\n"
+			+ "JOIN DEPARTMENT  ON(DEPT_ID = DEPT_CODE)\r\n"
+			+ "GROUP BY DEPT_TITLE";
 			rs = stmt.executeQuery(sql);
 			
 			while(rs.next()) {	
-				empList.add(new Employee(
-						rs.getString("DEPT_TITLE"), 
-						rs.getInt("SUM(SALARY)")));
+				salaryListByDept.put(rs.getString("DEPT_TITLE"), rs.getDouble("SALARY"));
 			}
 				
 		} catch(Exception e) {
@@ -362,7 +461,7 @@ public class EmployeeDAO {
 			}
 		}
 				
-		return empList;
+		return salaryListByDept;
 		
 	}
 
@@ -371,7 +470,7 @@ public class EmployeeDAO {
 
 
 
-	/**주민등록번호가 일치하는 사원 정보 조회
+	/**9. 주민등록번호가 일치하는 사원 정보 조회
 	 * @param empNo
 	 * @return
 	 */
@@ -435,93 +534,54 @@ public class EmployeeDAO {
 
 
 
-
-
-
-	public int updateEmployee(Employee emp) {
-		int result = 0;
-		
+	/** 
+	 * 10. 직급별 급여 평균 조회
+	 * @return
+	 */
+	public LinkedHashMap<String, Double> viewSalaryByjobCode() {
+		LinkedHashMap<String, Double> salaryListByJob = new LinkedHashMap<>();
 		try {
-			Class.forName(driver);
 			
-			conn = DriverManager.getConnection(url, user, pw);
-			conn.setAutoCommit(false);
+			Class.forName(driver); 
 			
-			String sql = "UPDATE EMPLOYEE SET "
-					+ "EMAIL = ?, PHONE = ?, SALARY = ? "
-					+ "WHERE EMP_ID = ?";
+			conn = DriverManager.getConnection(url, user, pw); 
+			stmt = conn.createStatement(); 
+			String sql = "SELECT JOB_NAME, ROUND(AVG(SALARY), 1) SALARY\r\n"
+					+ "FROM EMPLOYEE e \r\n"
+					+ "JOIN JOB USING(JOB_CODE)\r\n"
+					+ "GROUP BY JOB_NAME";
+			rs = stmt.executeQuery(sql);
 			
-			//PreparedStatement 생성
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, emp.getEmail());
-			pstmt.setString(2, emp.getPhone());
-			pstmt.setInt(3, emp.getSalary());
-			pstmt.setInt(4, emp.getEmpId());
-			
-			result = pstmt.executeUpdate();
-			
-			if(result == 0) conn.rollback();
-			else			conn.commit();
-
-		} catch(Exception e) {
-			e.printStackTrace();
-			
-		} finally {
-			
-			try {
-				if(pstmt != null) pstmt.close();
-				if(conn != null) conn.close();
-			} catch(Exception e) {
-				e.printStackTrace();
+			while(rs.next()) {	
+				salaryListByJob.put(rs.getString("JOB_NAME") , rs.getDouble("SALARY"));
 			}
-		}
-		
-		
-		
-		return result;
-	}
-
-
-
-
-
-
-	public int deleteEmployee(int empId) {
-		int result = 0;
-		
-		try {
-			
-			Class.forName(driver);
-			
-			conn = DriverManager.getConnection(url, user, pw);
-			conn.setAutoCommit(false);
-			
-			String sql = "DELETE FROM EMPLOYEE "
-					+ "WHERE EMP_ID = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, empId);
-			
-			
-			result = pstmt.executeUpdate();
-			if(result != 0) conn.commit();
-			else 			conn.rollback();
 				
-			
-			
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if(pstmt != null) pstmt.close();
+				if(rs != null) rs.close();
+				if(stmt != null) stmt.close();
 				if(conn != null) conn.close();
-			} catch(Exception e) {
+			} catch(SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		
 		
-		return result;
+		
+		return salaryListByJob;
 	}
+
+
+
+
+
+
+
+
+
+
+
 
 }
