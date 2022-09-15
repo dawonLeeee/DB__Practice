@@ -11,7 +11,7 @@ ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 CREATE USER kh_ldw IDENTIFIED BY kh1234; 
 
 -- 사용자 계정 권한부여
-GRANT RESOURCE, CONNECT TO kh_ldw;
+GRANT RESOURCE, CONNECT TO kh_ldw; -- 업무시 보통 사용하는 최소 권한
 
 --객체 생성(테이블 등) 공간 할당량 지정
 ALTER USER kh_ldw DEFAULT TABLESPACE SYSTEM
