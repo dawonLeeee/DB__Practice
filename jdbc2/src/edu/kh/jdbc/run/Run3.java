@@ -1,6 +1,10 @@
 package edu.kh.jdbc.run;
 
+import java.sql.SQLException;
+import java.util.Scanner;
+
 import edu.kh.jdbc.model.service.TestService;
+import edu.kh.jdbc.model.vo.TestVO;
 
 /*
 번호, 제목, 내용을 입력받아 번호가 일치하는 행의 제목, 내용 수정
@@ -11,10 +15,37 @@ import edu.kh.jdbc.model.service.TestService;
  */
 
 public class Run3 {
+	
+	private static Scanner sc = new Scanner(System.in);
+	
 	public static void main(String[] args) {
 		
 		TestService service = new TestService();
 		
+		System.out.println("[게시판 내용 수정하기]");
+		System.out.print("번호 입력 : ");
+		int testNo = sc.nextInt();
+		sc.nextLine();
 		
+		System.out.print("수정할 제목 입력 : ");
+		String testTitle = sc.nextLine();
+		
+		System.out.print("수정할 내용 입력 : ");
+		String testContent = sc.nextLine();
+		
+		TestVO vo1 = new TestVO(testNo, testTitle, testContent);
+		
+		
+		try {
+			int result = service.update(vo1);
+			if(result > 0)
+				System.out.println("수정되었습니다.");
+			else
+				System.out.println("일치하는 번호가 없습니다.");
+		
+		} catch(Exception e) {
+			System.out.println("수정 중 예외가 발생했습니다.");
+			e.printStackTrace();
+		}
 	}
 }

@@ -7,4 +7,15 @@
 		INSERT INTO TB_TEST
 		VALUES(?, ?, ?)	
 	</entry>
+	
+	<entry key="updateTitle">
+		UPDATE TB_TEST SET TEST_TITLE  = ?
+		WHERE TEST_NO = ?
+	</entry>
+	
+	<entry key="updateContent">
+		UPDATE TB_TEST SET TEST_CONTENT  = ?
+		WHERE TEST_NO = ?
+	</entry>
+	
 </properties>

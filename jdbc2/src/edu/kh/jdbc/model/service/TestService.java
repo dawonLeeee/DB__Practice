@@ -12,6 +12,7 @@ import java.util.Scanner;
 import edu.kh.jdbc.common.JDBCTemplete;
 import edu.kh.jdbc.model.dao.TestDAO;
 import edu.kh.jdbc.model.vo.TestVO;
+import edu.kh.jdbc.run.Run3;
 
 // Service : 비즈니스 로직(데이터 가공, 트랜젝션 제어) 처리
 // -> 실제 프로그램이 제공하는 기능을 모아둔 클래스
@@ -24,7 +25,7 @@ import edu.kh.jdbc.model.vo.TestVO;
 public class TestService  {
 
 	private TestDAO dao = new TestDAO();
-	private Scanner sc = new Scanner(System.in);
+	
 
 	/** 1행 삽입 서비스 메서드
 	 * @param vo1
@@ -105,25 +106,29 @@ public class TestService  {
 	}
 	
 	
-	public int insert() {
+	public int update(TestVO vo1) throws Exception {
 		
 		Connection conn = getConnection();
-		int result = 0;
+		int res = 0;
 		
-		System.out.println("[게시판 내용 수정하기]");
-		System.out.print("번호 입력 : ");
-		int testNo = sc.nextInt();
+		try {
+			int result1 = dao.updateTitle(conn, vo1);
+			int result2 = dao.updateContent(conn, vo1);
+			
+			res = result1 * result2;
+			if(res > 0) commit(conn);
+			else rollback(conn);
+			
+			
+		} catch(Exception e) {
+			rollback(conn);
+			e.printStackTrace();
+			throw new Exception("DAO 수행 중 예외 발생");
+		} finally {
+			close(conn);
+		}
 		
-		System.out.print("수정할 제목 입력 : ");
-		String testTitle = sc.nextLine();
-		
-		System.out.print("수정할 내용 입력 : ");
-		String testContent = sc.nextLine();
-		
-		TestVO vo1 = new TestVO(testNo, testTitle, testContent);
-		
-		
-		return result;
+		return res;
 	}
 	
 	

@@ -43,10 +43,20 @@ public class TestDAO {
 		}
 	}
 	
-	// 매개변수 생성자(testNo 전달받음)
+// ???????????????????????????????????????????????? 삭제예정
+//	// 매개변수 생성자(testNo 전달받음)
+//	public TestDAO(int testNo) {
+//		
+//		try {
+//			prop = new Properties();
+//			prop.loadFromXML(new FileInputStream("test-query2.xml"));
+//		
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
-	
-	
+
 	
 	
 	/** 1행 삽입 DAO
@@ -93,4 +103,48 @@ public class TestDAO {
 		return result;
 	}
 
+	/** 번호가 일치하는 행의 제목, 내용 update DAO
+	 * @param conn
+	 * @param vo1
+	 * @return
+	 * @throws SQLException
+	 */
+	public int updateTitle(Connection conn, TestVO vo1) throws SQLException{
+		int result = 0;
+		
+		try {
+			String sql = prop.getProperty("updateTitle");
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, vo1.getTestTitle());
+			pstmt.setInt(2, vo1.getTestNo());
+			
+			result = pstmt.executeUpdate();
+
+		} finally {
+			close(pstmt);
+		}
+
+		return result;
+	}
+	
+	public int updateContent(Connection conn, TestVO vo1) throws SQLException{
+		int result = 0;
+		
+		try {
+			
+			String sql = prop.getProperty("updateContent");
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, vo1.getTestContent());
+			pstmt.setInt(2, vo1.getTestNo());
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
 }
