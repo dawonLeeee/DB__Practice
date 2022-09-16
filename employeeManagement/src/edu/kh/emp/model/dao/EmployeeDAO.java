@@ -14,7 +14,6 @@ import edu.kh.emp.model.vo.Employee;
 
 // DAO(Data Access Object; 데이터 접근 객체)
 // -> 데이터베이스에 접근(연결)하는 객체
-// -> 데이터베이스에 접근(연결)하는 객체
 public class EmployeeDAO {
 	
 	// JDBC 객체 참조변수로 필드 선언(class 내부에서 공통으로 사용 가능)
