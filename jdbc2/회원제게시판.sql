@@ -36,12 +36,45 @@ COMMENT ON COLUMN "MEMBER".ENROLL_DATE IS '회원 가입일';
 COMMENT ON COLUMN "MEMBER".SECESSION_FL IS '탈퇴여부(Y/N)';
 
 -- 회원 번호 시퀀스
-CREATE SEQUENCE SEQ_MEMBER_NUMBER
+CREATE SEQUENCE SEQ_MEMBER_NO
 START WITH 1
 INCREMENT BY 1
 NOCYCLE -- 붙여써야한다!
 NOCACHE;
 
+
+
+-- 회원가입 INSERT 
+INSERT INTO "MEMBER" VALUES(
+	SEQ_MEMBER_NO.NEXTVAL, 	'user01', 'pass01',	'유저일',	'M', DEFAULT, DEFAULT);
+
+INSERT INTO "MEMBER" VALUES(
+	SEQ_MEMBER_NO.NEXTVAL, 	'user02', 'pass02',	'유저이',	'F', DEFAULT, DEFAULT);
+
+INSERT INTO "MEMBER" VALUES(
+	SEQ_MEMBER_NO.NEXTVAL, 	'user03', 'pass03',	'유저삼',	'F', DEFAULT, DEFAULT);
+
+SELECT * FROM MEMBER;
+COMMIT;
+
+-- 아이디 중복확인
+-- (중복되는 아이디가 입력되어도 탈퇴한 계정이면 중복이 아니라고 판별)
+SELECT COUNT(*) -- 조회되는 행의 갯수 셈(중복->1, 아니면->0)
+FROM "MEMBER"
+WHERE MEMBER_ID = 'user01'
+AND SECESSION_FL = 'N'; 
+-- 아이디가 user1이면서 탈퇴하지 않은 회원(활동계정) 조회(->아이디 쓰는사람 있다!)
+
+
+-- login(아이디, 비밀번호가 일치하고 탈퇴를 안 한 회원)
+SELECT MEMBER_NO, MEMBER_ID, MEMBER_NM, MEMBER_GENDER, 
+	TO_CHAR(ENROLL_DATE, 'YYYY"년" MM"월" DD"일" HH24:MI:SS') ENROLL_DATE
+FROM "MEMBER"
+WHERE MEMBER_ID = 'user01'
+AND MEMBER_PW = 'pass01'
+AND SECESSION_FL = 'N';
+
+-----------------------------------------------------------
 
 CREATE TABLE 테이블명 (
 

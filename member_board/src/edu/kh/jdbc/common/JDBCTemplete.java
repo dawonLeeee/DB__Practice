@@ -21,7 +21,7 @@ public class JDBCTemplete {
 	
 	// static 메서드에서 필드를 사용하기 위해서는 필드도 static이어야 한다
 	private static Connection conn = null;
-
+	private static Statement stmt = null;
 	
 	
 	
