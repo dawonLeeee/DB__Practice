@@ -126,19 +126,4 @@ public class MainDAO {
 		return loginMember;
 	}
 
-	public int contextfx() throws Exception{
-		
-		int result = 0;
-		
-		try {
-			String sql = prop.getProperty("contextfx")
-			
-			
-		} finally {
-			close(rs);
-			close(pstmt);
-		}
-		
-		return result;
-	}
 }

@@ -74,6 +74,50 @@ WHERE MEMBER_ID = 'user01'
 AND MEMBER_PW = 'pass01'
 AND SECESSION_FL = 'N';
 
+-- secession
+UPDATE "MEMBER" 
+SET SECESSION_FL = 'Y'
+WHERE MEMBER_ID = ?;
+
+-- 회원 목록 조회(아이디, 이름, 성별)
+-- 탈퇴 회원 미포함
+-- 가입일 내림차순
+SELECT MEMBER_ID, MEMBER_NM, MEMBER_GENDER
+FROM "MEMBER"
+WHERE SECESSION_FL = 'N'
+ORDER BY MEMBER_ID DESC; 
+-- ENROLL_DATE(날짜) 비교보다 MEMBER_NO(단순 숫자) 비교를 하는게 더 빠름
+
+
+-- 내 정보 수정
+UPDATE "MEMBER" SET 
+MEMBER_NM = '수정된이름', MEMBER_GENDER = 'F'
+WHERE MEMBER_NO = 3;
+
+SELECT * FROM "MEMBER";
+
+ROLLBACK;
+
+
+-- 비밀번호 변경
+UPDATE "MEMBER" SET
+MEMBER_PW = '새비밀번호'
+WHERE MEMBER_ID = '1'
+AND MEMBER_PW = '현재비밀번호'
+
+
+--회원 탈퇴
+UPDATE "MEMBER" SET
+SECESSION_FL = 'Y'
+WHERE MEMBER_NO = ?
+
+
+UPDATE "MEMBER" SET
+SECESSION_FL = 'N'
+WHERE MEMBER_ID = 'user02';
+
+COMMIT;
+
 -----------------------------------------------------------
 
 CREATE TABLE 테이블명 (

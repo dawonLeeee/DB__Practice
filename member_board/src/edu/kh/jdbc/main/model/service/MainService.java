@@ -68,16 +68,6 @@ public class MainService {
 		return loginMember;
 	}
 
-	public int contextfx() throws Exception{
-		
-
-		Connection conn = getConnection();
-		int result = dao.contextfx();
-		
-		if(result > 0) commit(conn);
-		else			rollback(conn);
-		return result;
-	}
 
 
 	

@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import edu.kh.jdbc.main.model.service.MainService;
+import edu.kh.jdbc.member.view.MemberView;
 import edu.kh.jdbc.member.vo.Member;
 
 
@@ -12,8 +13,11 @@ public class MainView {
 
 	private Scanner sc = new Scanner(System.in);
 	private MainService service = new MainService();
-	private Member loginMember = null; // 로그인된 회원정보 저장한 객체를 참조하는 참조변수
+	public static Member loginMember = null; // 로그인된 회원정보 저장한 객체를 참조하는 참조변수
 	// 로그인x-> null, 로그인0 -> !null
+	
+	// 회원 기능 메뉴 객체 생성
+	private MemberView memberView = new MemberView();
 
 	/**
 	 * 메인 메뉴 출력 메서드
@@ -53,6 +57,8 @@ public class MainView {
 					}
 
 				} else { // 로그인 0
+					
+					
 					System.out.println("\n\n******로그인 메뉴*******");
 					System.out.println("1. 회원 기능");
 					System.out.println("2. 게시판 기능");
@@ -65,19 +71,19 @@ public class MainView {
 					System.out.println();
 
 					switch (input) {
-					case 1: userfx(); break;
-					case 2: contentfx(); break;
-					// 로그인 -> loginMember != null
-					case 0:
-						loginMember = null;
-						System.out.println("\n[로그아웃 되었습니다]\n");
-						input = -1; // do-while문이 종료되지 않도록 함
+					case 1:
+						memberView.memberMenu(loginMember);
 						break;
-					case 99: {
+					case 2:
+						signUp();
+						break;
+					case 0:
+						System.out.println("<<로그아웃>>");
+						loginMember = null;
+						break;
+					case 99:
 						System.out.println("<<프로그램 종료>>");
-						//input = 0; 이거 말고 System.exit(int);로도 가능
-						System.exit(0); // JVM을 종료 // 매개변수는 0, 아니면 오류를 의미
-					}
+						input = 0;
 						break;
 					default:
 						System.out.println("<<메뉴에 작성된 번호만 입력해주세요>>\n");
@@ -194,28 +200,6 @@ public class MainView {
 			e.printStackTrace();
 		}
 
-	}
-	
-	private void userfx() {
-		
-		
-	}
-	
-	private void contentfx() {
-
-		System.out.println("[게시판 기능]");
-		
-		try {
-			int result = service.contextfx();
-			if(result > 0) System.out.println("게시글 등록 완료");
-			else			System.out.println("게시글 등록 실패");
-			
-			
-			
-		} catch(Exception e) {
-			System.out.println("게시판 기능 사용 중 오류 발생");
-			e.printStackTrace();
-		}
 	}
 
 }
