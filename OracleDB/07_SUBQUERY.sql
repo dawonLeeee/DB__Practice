@@ -46,12 +46,11 @@ WHERE SALARY >= 3047663;
 
 -- 3) 전 직원의 평균 급여보다 많은 급여를 받고 있는 직원 조회
 --> 위의 2단계를 하나의 쿼리로 가능하다!! --> 1) 쿼리문을 서브쿼리로!!
-SELECT EMP_ID, EMP_NAME, DEPT_CODE, SALARY 
+SELECT EMP_ID, EMP_NAME, DEPT_CODE, SALARY
 FROM EMPLOYEE e 
-WHERE SALARY >= (SELECT CEIL(AVG(SALARY))
-FROM EMPLOYEE);
-                 
-
+WHERE SALARY > 
+		(SELECT AVG(SALARY)
+		FROM EMPLOYEE e );
 
 -------------------------------------------------------------------
 

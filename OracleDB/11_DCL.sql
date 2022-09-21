@@ -154,3 +154,63 @@ REVOKE SELECT ON EMPLOYEE FROM ldw_sample;
 SELECT * FROM kh_ldw.EMP_SAMPLE; --안됨
 -- ORA-00942: 테이블 또는 뷰가 존재하지 않습니다
 
+
+
+
+
+
+
+-- 삭제
+---------------------------------------------------------------------
+
+-- 1. (SYS) 사용자 계정 생성
+ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
+
+CREATE USER ldw_sample IDENTIFIED BY sample1234;
+
+GRANT CREATE SESSION TO ldw_sample;
+
+CREATE TABLE TB_TEST(
+	PK_COL NUMBER PRIMARY KEY,
+	CONTENT VARCHAR2(20)
+);
+
+GRANT CREATE TABLE TO ldw_sample;
+ALTER USER ldw_sample DEFAULT TABLESPACE
+SYSTEM QUOTA UNLIMITD ON SYSTEM;
+
+
+ALTER USER ldw_sample DEFAULT TABLESPACE
+SYSTEM QUOTA UMLIMITED ON SYSTEM;
+
+
+-- (SYS) sample계정에 CONNECT, RESOURCE 권한 부여
+GRANT CONNTCT, RESOURCE TO ldw_sample;
+-- CONNECT :  DB접속권한
+-- RESOURCE : DB 사용을 위한 기본 객체생성 권한
+
+
+-- 객체권한 :
+-- 사용자 계정끼리 부여하는 권한. (객체 접근권한)
+
+GRANT SELECT ON EMPLOYEE TO ldw_sample;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

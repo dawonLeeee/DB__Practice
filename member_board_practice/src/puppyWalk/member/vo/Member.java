@@ -1,4 +1,4 @@
-package edu.kh.jdbc.member.vo;
+package puppyWalk.member.vo;
 
 
 
@@ -10,7 +10,7 @@ public class Member {
 	private String memberId;
 	private String memberPw;
 	private String memberName;
-	private String memberGender;
+	private String memberRRNumber; // 주민등록번호
 	private String enrollDate; // DB에서 꺼내올때 TO_CHAR 쓸거라서 String으로 꺼내옴
 	private String secession;
 	
@@ -18,18 +18,24 @@ public class Member {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Member(String memberId, String memberPw, String memberName, String memberGender) {
+	public Member(int memberNo, String memberId, String memberPw, String memberName, String memberRRNumber,
+			String enrollDate, String secession) {
 		super();
+		this.memberNo = memberNo;
 		this.memberId = memberId;
 		this.memberPw = memberPw;
 		this.memberName = memberName;
-		this.memberGender = memberGender;
+		this.memberRRNumber = memberRRNumber;
+		this.enrollDate = enrollDate;
+		this.secession = secession;
 	}
 
-	public Member(String memberId, String memberName, String memberGender) {
+	
+
+	public Member(String memberId, String memberName) {
+		super();
 		this.memberId = memberId;
 		this.memberName = memberName;
-		this.memberGender = memberGender;
 	}
 
 	public int getMemberNo() {
@@ -64,12 +70,12 @@ public class Member {
 		this.memberName = memberName;
 	}
 
-	public String getMemberGender() {
-		return memberGender;
+	public String getMemberRRNumber() {
+		return memberRRNumber;
 	}
 
-	public void setMemberGender(String memberGender) {
-		this.memberGender = memberGender;
+	public void setMemberRRNumber(String memberRRNumber) {
+		this.memberRRNumber = memberRRNumber;
 	}
 
 	public String getEnrollDate() {
@@ -88,11 +94,6 @@ public class Member {
 		this.secession = secession;
 	}
 
-	@Override
-	public String toString() {
-		return "Member [memberNo=" + memberNo + ", memberId=" + memberId + ", memberPw=" + memberPw + ", memberName="
-				+ memberName + ", memberGender=" + memberGender + ", enrollDate=" + enrollDate + "]";
-	}
-
+	
 	
 }

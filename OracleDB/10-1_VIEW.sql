@@ -28,7 +28,6 @@
     -- 4) WITH READ ONLY 옵션 : 뷰에 대해 조회만 가능(DML 수행 불가)  
 
 
-
 */
 
 -- 사번, 이름, 부서명, 직급명 조회 결과를 저장하는 VIEW 생성
@@ -70,8 +69,6 @@ CREATE TABLE DEPT_COPY2
 AS SELECT * FROM DEPARTMENT;
 
 -- 복사한 테이블을 이용해서 VIEW 생성
-SELECT * FROM DEPT_COPY2;
-
 CREATE OR REPLACE VIEW V_DCOPY2
 AS SELECT DEPT_ID, LOCATION_ID FROM DEPT_COPY2;
 

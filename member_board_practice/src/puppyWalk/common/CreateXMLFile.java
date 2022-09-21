@@ -1,4 +1,4 @@
-package edu.kh.jdbc.common;
+package puppyWalk.common;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

@@ -1,6 +1,6 @@
-package edu.kh.jdbc.main.run;
+package puppyWalk.main.run;
 
-import edu.kh.jdbc.main.view.MainView;
+import puppyWalk.main.view.MainView;
 
 public class MainRun {
 

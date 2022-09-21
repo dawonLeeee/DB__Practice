@@ -1,4 +1,4 @@
-package edu.kh.jdbc.common;
+package puppyWalk.common;
 
 import java.io.FileInputStream;
 import java.sql.Connection;

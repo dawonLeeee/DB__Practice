@@ -1,6 +1,6 @@
-package edu.kh.jdbc.main.model.dao;
+package puppyWalk.main.model.dao;
 
-import static edu.kh.jdbc.common.JDBCTemplete.*;
+import static puppyWalk.common.JDBCTemplete.*;
 
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -11,8 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import edu.kh.jdbc.common.JDBCTemplete;
-import edu.kh.jdbc.member.vo.Member;
+import puppyWalk.common.JDBCTemplete;
+import puppyWalk.member.vo.Member;
 
 // DAO(Data Access Object) : DB연결용 객체
 public class MainDAO {
@@ -78,7 +78,7 @@ public class MainDAO {
 			pstmt.setString(1, member.getMemberId());
 			pstmt.setString(2, member.getMemberPw());
 			pstmt.setString(3, member.getMemberName());
-			pstmt.setString(4, member.getMemberGender());
+			pstmt.setString(4, member.getMemberRRNumber());
 
 			result = pstmt.executeUpdate();
 
@@ -115,7 +115,7 @@ public class MainDAO {
 				loginMember.setMemberNo(rs.getInt("MEMBER_NO"));
 				loginMember.setMemberId(memberId);
 				loginMember.setMemberName(rs.getString("MEMBER_NM"));
-				loginMember.setMemberGender(rs.getString("MEMBER_GENDER"));
+				loginMember.setMemberRRNumber(rs.getString("MEMBER_RRNUMBER"));
 				loginMember.setEnrollDate(rs.getString("ENROLL_DATE"));	
 			}
 
@@ -127,101 +127,9 @@ public class MainDAO {
 		return loginMember;
 	}
 
-	public int contextfx() throws Exception{
-		
-		int result = 0;
-		
-		try {
-			String sql = prop.getProperty("contextfx");
-			
-			
-		} finally {
-			close(rs);
-			close(pstmt);
-		}
-		
-		return result;
-	}
-
-
-
-	/** 회원 목록 조회(아이디, 이름, 성별)
-	 * @param conn
-	 * @return
-	 * @throws Exception
-	 */
-	public ArrayList<Member> lookMembers(Connection conn) throws Exception {
-		
-		ArrayList<Member> memberList = new ArrayList<>();
-		String sql = prop.getProperty("lookMembers");
-		stmt = conn.createStatement();
-		
-		rs = stmt.executeQuery(sql);
-		while(rs.next()) {
-			memberList.add(new Member(rs.getString("MEMBER_ID"), rs.getString("MEMBER_NM"), rs.getString("MEMBER_GENDER")));
-		}
-		
-		close(rs);
-		close(stmt);
-		
-		
-		return memberList;
-	}
-
-	/** 내 정보 수정(이름, 성별)
-	 * @param conn
-	 * @param memberName
-	 * @param memberGender
-	 * @return
-	 */
-	public int updateMember(Connection conn, String memberId, String memberName, String memberGender) throws Exception{
-
-		String sql = prop.getProperty("updateMember");
-		pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, memberName);
-		pstmt.setString(2, memberGender);
-		pstmt.setString(3, memberId);
-		
-		int result = pstmt.executeUpdate();
-		
-		close(pstmt);
-		
-		return result;
-	}
 	
-	/** 회원 탈퇴
-	 * @param conn
-	 * @param loginMember
-	 * @return
-	 * @throws Exception
-	 */
-	public int secession(Connection conn, Member loginMember) throws Exception{
-		
-		int result = 0;
-		try {
-			String sql = prop.getProperty("secession");
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, loginMember.getMemberNo());
-			
-			result = pstmt.executeUpdate();
-			
-			
-		} finally {
-			close(pstmt);
-		}
-		return result;
-	}
 
-	public int updatePw(Connection conn, String memberId, String newPw) throws Exception{
 
-		String sql = prop.getProperty("updatePw");
-		pstmt = conn.prepareStatement(sql);
-		pstmt.setString(1, newPw);
-		pstmt.setString(2, memberId);
-		int result = pstmt.executeUpdate();
-		
-		close(pstmt);
-		
-		return result;
-	}
+
+	
 }
