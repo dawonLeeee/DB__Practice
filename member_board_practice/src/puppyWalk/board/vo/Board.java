@@ -1,29 +1,21 @@
 package puppyWalk.board.vo;
 
+import java.util.List;
+
 public class Board {
 	
-	private int boardNo;
-	private String memberId;
-	private String boardTitle;
-	private String boardContent;
-	private int boardContentViews;
-	private String enrollDate;
-	private String secession;
+	private int boardNo; //게시글 번호
+	private String boardTitle; //게시글 제목
+	private String boardContent; //게시글 내용
+	private String createDate; //게시글 작성일
+	private int readCount; // 조회 수
+	private int memberNo; // 작성자 회원 번호
+	private String memberName; // 작성자 회원 이름
+	private int commentCount; // 댓글 수
+	private List<Comment> commentList;
 	
 	public Board() {
 		// TODO Auto-generated constructor stub
-	}
-
-	public Board(int boardNo, String memberId, String boardTitle, String boardContent, int boardContentViews,
-			String enrollDate, String secession) {
-		super();
-		this.boardNo = boardNo;
-		this.memberId = memberId;
-		this.boardTitle = boardTitle;
-		this.boardContent = boardContent;
-		this.boardContentViews = boardContentViews;
-		this.enrollDate = enrollDate;
-		this.secession = secession;
 	}
 
 	public int getBoardNo() {
@@ -32,14 +24,6 @@ public class Board {
 
 	public void setBoardNo(int boardNo) {
 		this.boardNo = boardNo;
-	}
-
-	public String getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
 	}
 
 	public String getBoardTitle() {
@@ -58,29 +42,54 @@ public class Board {
 		this.boardContent = boardContent;
 	}
 
-	public int getBoardContentViews() {
-		return boardContentViews;
+	public String getCreateDate() {
+		return createDate;
 	}
 
-	public void setBoardContentViews(int boardContentViews) {
-		this.boardContentViews = boardContentViews;
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
 
-	public String getEnrollDate() {
-		return enrollDate;
+	public int getReadCount() {
+		return readCount;
 	}
 
-	public void setEnrollDate(String enrollDate) {
-		this.enrollDate = enrollDate;
+	public void setReadCount(int readCount) {
+		this.readCount = readCount;
 	}
 
-	public String getSecession() {
-		return secession;
+	public int getMemberNo() {
+		return memberNo;
 	}
 
-	public void setSecession(String secession) {
-		this.secession = secession;
+	public void setMemberNo(int memberNo) {
+		this.memberNo = memberNo;
 	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+
+	public int getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
+
+	public List<Comment> getCommentList() {
+		return commentList;
+	}
+
+	public void setCommentList(List<Comment> commentList) {
+		this.commentList = commentList;
+	}
+
 	
 	 
 }

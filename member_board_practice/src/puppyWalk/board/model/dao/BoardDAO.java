@@ -1,5 +1,7 @@
 package puppyWalk.board.model.dao;
 
+
+
 import static puppyWalk.common.JDBCTemplete.close;
 
 import java.io.FileInputStream;
@@ -40,140 +42,95 @@ public class BoardDAO {
 	 */
 	public List<Board> selectAllBoard(Connection conn) throws Exception {
 
-		List<Board> memberList = new ArrayList<>();
+		List<Board> boardList = new ArrayList<>();
 		try {
 			String sql = prop.getProperty("selectAllBoard");
 			stmt = conn.createStatement();
-	
 			rs = stmt.executeQuery(sql);
+			
 			if(rs.next()) {
 				Board board = new Board();
 				board.setBoardNo(rs.getInt("BOARD_NO"));
 				board.setBoardTitle(rs.getString("BOARD_TITLE"));
-				board.setBoardContentViews(rs.getInt("BOARD_CONTENT_VIEWS"));
-				board.setEnrollDate(rs.getString("ENROLL_DATE"));
+				board.setBoardContent(rs.getString("BOARD_CONTENT"));
+				board.setMemberName(rs.getString("MEMBER_NM"));
+				board.setCreateDate(rs.getString("CREATE_DT"));
+				board.setReadCount(rs.getInt("READ_COUNT"));
+				board.setCommentCount(rs.getInt("COMMENT_COUNT"));
+				
+				boardList.add(board);
 			}
 		} finally {
+			close(rs);
 			close(stmt);
 		}
-		return memberList;
+		return boardList;
 	}
 
-	/** 내가 쓴 글 조회
-	 * @param conn
-	 * @param memberId
-	 * @return List<Board> memberList
-	 * @throws Exception
-	 */
-	public List<Board> selectMyBoard(Connection conn, String memberId) throws Exception{
-		
-		List<Board> memberList = new ArrayList<>();
-		try {
-			String sql = prop.getProperty("selectMyBoard");
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, memberId);
-	
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				Board board = new Board();
-				board.setBoardNo(rs.getInt("BOARD_NO"));
-				board.setBoardTitle(rs.getString("BOARD_TITLE"));
-				board.setBoardContent(rs.getString("BOARD_CONTENT"));
-				board.setBoardContentViews(rs.getInt("BOARD_CONTENT_VIEWS"));
-				board.setEnrollDate(rs.getString("ENROLL_DATE"));
-			}
-		} finally {
-			close(pstmt);
-			close(rs);
-		}
-
-		return memberList;
-	}
-
-
-	/** 게시글 하나 보여주기
+	/** 게시글 상세 조회
 	 * @param conn
 	 * @param boardNo
-	 * @param memberId
-	 * @return
+	 * @param memberNo
+	 * @return 게시글 정보를 담은 board
 	 */
-	public Board selectBoard(Connection conn, int boardNo, String memberId) throws Exception {
+	public Board selectBoard(Connection conn, int boardNo) throws Exception{
 
 		Board board = null;
+		
 		try {
 			String sql = prop.getProperty("selectBoard");
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardNo);
-			pstmt.setString(2, memberId);
-	
+			
+			
 			rs = pstmt.executeQuery();
-			if(rs.next()) {
+			
+			if(rs.next()){
 				board = new Board();
-				board.setBoardNo(boardNo);
+				board.setBoardNo(rs.getInt("BOARD_NO"));
 				board.setBoardTitle(rs.getString("BOARD_TITLE"));
 				board.setBoardContent(rs.getString("BOARD_CONTENT"));
-				board.setBoardContentViews(rs.getInt("BOARD_CONTENT_VIEWS"));
-				board.setEnrollDate(rs.getString("ENROLL_DATE"));
+				board.setMemberName(rs.getString("MEMBER_NM"));
+				board.setMemberNo(rs.getInt("MEMBER_NO"));
+				board.setCreateDate(rs.getString("CREATE_DT"));
+				board.setReadCount(rs.getInt("READ_COUNT"));
+				
+				
 			}
 		} finally {
-			close(pstmt);
 			close(rs);
+			close(pstmt);
 		}
-
+		
 		return board;
 	}
 
 
-	/** 게시글 수정
+
+	/** 조회수 증가
 	 * @param conn
 	 * @param boardNo
-	 * @param boardContent 
-	 * @param boardTitle 
-	 * @return 수정된 행의 갯수 result
-	 */
-	public int updateBoard(Connection conn, int boardNo, String boardTitle, String boardContent) throws Exception {
-
-		int result = 0;
-		try {
-			String sql = prop.getProperty("updateBoard");
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, boardTitle);
-			pstmt.setString(2, boardContent);
-			pstmt.setInt(3, boardNo);
-			
-			result = pstmt.executeUpdate();
-			
-			
-		} finally {
-			close(pstmt);
-		}
-		return result;
-	}
-
-
-	/** 게시글 삭제
-	 * @param conn
-	 * @param boardNo
-	 * @return
+	 * @return 업데이트된 행의 갯수 반환
 	 * @throws Exception
 	 */
-	public int deleteBoard(Connection conn, int boardNo) throws Exception {
+	public int increaseReadCount(Connection conn, int boardNo) throws Exception {
 
-		int result = 0;
+		int result = 0; 
+		
 		try {
-			String sql = prop.getProperty("deleteBoard");
+			String sql = prop.getProperty("increaseReadCount");
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardNo);
 			
-			result = pstmt.executeUpdate();
 			
+			result = pstmt.executeUpdate();
 			
 		} finally {
 			close(pstmt);
 		}
 		return result;
+		
 	}
-
 
 		
 }

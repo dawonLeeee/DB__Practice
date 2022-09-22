@@ -16,7 +16,8 @@ public class MainView {
 	private MainService service = new MainService();
 	private MemberView memberView = new MemberView();
 	private BoardView boardView = new BoardView();
-	private static Member loginMember = null; // 로그인된 회원정보 저장한 객체를 참조하는 참조변수
+	
+	public static Member loginMember = null; // 로그인된 회원정보 저장한 객체를 참조하는 참조변수
 	
 
 	private int input;
