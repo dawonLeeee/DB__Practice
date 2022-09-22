@@ -76,6 +76,9 @@ public class MemberDAO {
 			
 			result = pstmt.executeUpdate();
 			
+			if(result > 0) commit(conn);
+			else		rollback(conn);
+			
 		} finally {
 			close(pstmt);
 		}
