@@ -97,6 +97,7 @@ public class BoardDAO {
 				board.setReadCount(rs.getInt("READ_COUNT"));
 				
 				
+				
 			}
 		} finally {
 			close(rs);
