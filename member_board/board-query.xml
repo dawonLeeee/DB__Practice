@@ -25,6 +25,7 @@
 		]]>
 	</entry>
 	
+	
 	<!-- 게시글 상세 조회 -->
 	<entry key="selectBoard">
 		SELECT BOARD_NO, BOARD_TITLE, BOARD_CONTENT, MEMBER_NO, MEMBER_NM, READ_COUNT, 
@@ -35,10 +36,28 @@
 		AND BOARD_NO = ?
 	</entry>
 	
+	
 	<!-- 조회수 증가 -->
 	<entry key="increaseReadCount">
 		UPDATE "BOARD" SET
 		READ_COUNT = READ_COUNT+1
+		WHERE BOARD_NO = ?
+	</entry>
+	
+	
+	<!-- 게시글 수정 -->
+	<entry key="updateBoard">
+		UPDATE "BOARD" SET
+		BOARD_TITLE = ?,
+		BOARD_CONTENT = ?
+		WHERE BOARD_NO = ?
+	</entry>
+	
+	
+	<!-- 게시글 삭제 -->
+	<entry key="deleteBoard">
+		UPDATE "BOARD" SET
+		DELETE_FL = 'Y'
 		WHERE BOARD_NO = ?
 	</entry>
 	
