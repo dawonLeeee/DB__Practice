@@ -34,7 +34,9 @@ public class MainView {
 				// ctrl + shift + p : 괄호 시작/끝 이동
 				// 로그인 x화면
 				if (loginMember == null) {
-					System.out.println("\n\n******회원제 게시판 프로그램*******");
+					System.out.println("\n===========================================");
+					System.out.println("******puppyWalk에 오신걸 환영합니다*******");
+					System.out.println("===========================================");
 					System.out.println("1. 로그인");
 					System.out.println("2. 회원가입");
 					System.out.println("0. 프로그램 종료");
@@ -59,39 +61,49 @@ public class MainView {
 					}
 				} else { // 로그인 0
 
-					System.out.println("\n\n******로그인 메뉴*******");
-					System.out.println("1. 회원 기능");
-					System.out.println("2. 게시판 기능");
-					System.out.println("0. 로그아웃");
-					System.out.println("99. 프로그램 종료");
+					if (loginMember.getPartnerFlag().equals("N")) { // 회원 메뉴
+						System.out.println("\n\n******로그인 메뉴*******");
+						System.out.println("1. 회원 메뉴");
+						System.out.println("2. 파트너 정보 보기");
+						System.out.println("3. 스케줄 예약하기");
+						System.out.println("4. 후기 작성하기");
+						System.out.println("0. 로그아웃");
+						System.out.println("99. 프로그램 종료");
 
-					System.out.print("\n메뉴 선택 >>");
-					input = sc.nextInt();
-					sc.nextLine(); // 입력버퍼의 개행문자 제거
-					System.out.println();
+						System.out.print("\n메뉴 선택 >>");
+						input = sc.nextInt();
+						sc.nextLine(); // 입력버퍼의 개행문자 제거
+						System.out.println();
 
-					switch (input) {
-					case 1:
-						memberView.memberMenu(loginMember);
-						break;
-					case 2:
-						boardView.mainMenu(loginMember);
-						break;
-					// 로그인 -> loginMember != null
-					case 0:
-						loginMember = null;
-						System.out.println("\n[로그아웃 되었습니다]\n");
-						input = -1; // do-while문이 종료되지 않도록 함
-						break;
-					case 99: {
-						System.out.println("<<프로그램 종료>>");
-						System.exit(0); 
+						switch (input) {
+						case 1:
+							memberView.memberMenu(loginMember);
+							break;
+						case 2 : #### break;
+						case 3 : #### break;
+						case 4:
+							boardView.mainMenu(loginMember);
+							break;
+						// 로그인 -> loginMember != null
+						case 0:
+							loginMember = null;
+							System.out.println("\n[로그아웃 되었습니다]\n");
+							input = -1; // do-while문이 종료되지 않도록 함
+							break;
+						case 99: {
+							System.out.println("<<프로그램 종료>>");
+							System.exit(0);
+						}
+						default:
+							System.out.println("<<메뉴에 작성된 번호만 입력해주세요>>\n");
+						}
 					}
-					default:
-						System.out.println("<<메뉴에 작성된 번호만 입력해주세요>>\n");
+					if(loginMember != null) {
+						if(loginMember.getPartnerFlag().equals("Y")) { // 파트너 메뉴
+							memberView.partnerMenu(loginMember);
+						}
 					}
 				}
-
 			} catch (InputMismatchException e) {
 				System.out.println("\n<<입력 형식이 올바르지 않습니다>>\n");
 				sc.nextLine(); // 입력버퍼에 남아있는 잘못된 문자열 제거
@@ -122,7 +134,7 @@ public class MainView {
 		try {
 			loginMember = service.login(memberId, memberPw);
 			if (loginMember != null) {
-				System.out.println("\n" + loginMember.getMemberName() + "님, 환영합니다!\n");
+				System.out.println("\n" + loginMember.getMemberName() + "님, 환영합니다 멍멍!!\n");
 			} else // 로그인 실패시
 				System.out.println("[아이디가 없거나 비밀번호가 일치하지 않습니다]");
 		} catch (Exception e) {
@@ -180,15 +192,24 @@ public class MainView {
 			memberRRNumber = sc.next().toUpperCase(); // 대문자 변경
 
 
+			System.out.print("파트너로 가입하시나요? (Y/N) : ");
+			String partnerFlag = null;
+			while(true) {
+				partnerFlag = sc.nextLine();
+				if(partnerFlag.equals("Y") || partnerFlag.equals("N")) break;
+				else	System.out.println("\n[(Y/N)만 입력해주세요]\n");
+			}
+			
+			
 			// 하나의 VO에 담아서 service 호출 후 결과 반환받기
 			Member member = new Member();
 			member.setMemberId(memberId);
 			member.setMemberPw(memberPw1);
 			member.setMemberName(memberName);
 			member.setMemberRRNumber(memberRRNumber);
+			member.setPartnerFlag(partnerFlag);
+			
 			int result = service.signUp(member);
-
-			// 서비스 처리 결고에 따른 출력 화면 제어
 			if (result > 0)
 				System.out.println("******회원가입 성공******");
 			else

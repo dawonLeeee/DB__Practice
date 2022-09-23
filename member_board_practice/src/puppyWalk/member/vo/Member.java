@@ -1,7 +1,8 @@
 package puppyWalk.member.vo;
 
+import java.util.List;
 
-
+import puppyWalk.schedule.vo.Schedule;
 //VO(Value Object) : 값을 저장하는 용도의 객체
 // JDBC에서는 테이블의 한 행의 조회결과 또는 삽입, 수정을 위한 데이터를 저장하는 용도의 객체
 public class Member {
@@ -12,30 +13,13 @@ public class Member {
 	private String memberName;
 	private String memberRRNumber; // 주민등록번호
 	private String enrollDate; // DB에서 꺼내올때 TO_CHAR 쓸거라서 String으로 꺼내옴
+	private String partnerFlag;
 	private String secession;
+	private int scheduleNo;
+	private List<Schedule> scheduleList;
 	
 	public Member() {
 		// TODO Auto-generated constructor stub
-	}
-
-	public Member(int memberNo, String memberId, String memberPw, String memberName, String memberRRNumber,
-			String enrollDate, String secession) {
-		super();
-		this.memberNo = memberNo;
-		this.memberId = memberId;
-		this.memberPw = memberPw;
-		this.memberName = memberName;
-		this.memberRRNumber = memberRRNumber;
-		this.enrollDate = enrollDate;
-		this.secession = secession;
-	}
-
-	
-
-	public Member(String memberId, String memberName) {
-		super();
-		this.memberId = memberId;
-		this.memberName = memberName;
 	}
 
 	public int getMemberNo() {
@@ -86,6 +70,14 @@ public class Member {
 		this.enrollDate = enrollDate;
 	}
 
+	public String getPartnerFlag() {
+		return partnerFlag;
+	}
+
+	public void setPartnerFlag(String partnerFlag) {
+		this.partnerFlag = partnerFlag;
+	}
+
 	public String getSecession() {
 		return secession;
 	}
@@ -94,6 +86,23 @@ public class Member {
 		this.secession = secession;
 	}
 
+	public int getScheduleNo() {
+		return scheduleNo;
+	}
+
+	public void setScheduleNo(int scheduleNo) {
+		this.scheduleNo = scheduleNo;
+	}
+
+	public List<Schedule> getScheduleList() {
+		return scheduleList;
+	}
+
+	public void setScheduleList(List<Schedule> scheduleList) {
+		this.scheduleList = scheduleList;
+	}
+
+	 
 	
 	
 }

@@ -39,7 +39,7 @@ public class BoardView {
 
 			switch (input) {
 			case 1: selectAllBoard(); break;
-			case 2: selectBoard(); break;
+			case 2: selectAllBoardMenu(); break;
 			case 3: updateBoard(); break;
 			case 4: deleteBoard(); break;
 			case 5: selectOneBoard(); break;
@@ -62,10 +62,35 @@ public class BoardView {
 
 	/** 게시판 목록조회
 	 */
-	public void selectAllBoard() {
+	public void selectAllBoardMenu() {
 		
 		System.out.println("[게시글 목록 조회]\n");
 		
+		System.out.println("1. 훈련/산책/기타 모두 보기");
+		System.out.println("2. 훈련 후기만 보기");
+		System.out.println("3. 산책 후기만 보기");
+		System.out.println("4. 기타 게시글만 보기"); 
+		
+		sc.nextLine();
+		System.out.print("번호 선택 : ");
+		int input = sc.nextInt();
+		
+		switch(input) {
+		case 1 : selectAllBoard(); break;
+		case 2 : break;
+		case 3:  break;
+		case 4 : break;
+		}
+		
+
+	}
+	
+	/**
+	 * 게시글 목록 조회 - 훈련/산책/기타 모두 보기
+	 */
+	private void selectAllBoard() {
+
+		System.out.println("\n[게시글 상세 조회]\n");
 		try {
 			List<Board> boardList = boardService.selectAllBoard();
 			printAllBoard(boardList);
@@ -74,8 +99,13 @@ public class BoardView {
 			System.out.println("\n<<게시글 목록 조회 중 예외 발생>>\n");
 			e.printStackTrace();
 		}
+		
 	}
-	
+
+
+
+
+
 	/**
 	 * 게시글 상세 조회(+ 댓글 기능)
 	 */

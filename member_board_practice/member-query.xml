@@ -3,14 +3,37 @@
 <properties>
 <comment>member-query.xml file</comment>
 	
+	<!-- 내 정보 조회 -->
+	<entry key="selectMySchedule">
+		SELECT S.SCHEDULE_NO "SCHEDULE_NO", TO_CHAR(SCHEDULE_TIME, 'YYYY-MM-DD HH24:MI') SCHEDULE_TIME, SERVICE_TYPE , MEMBER_NM
+		FROM SCHEDULE S
+		JOIN BOOKING B ON(S.SCHEDULE_NO = B.SCHEDULE_NO)
+		JOIN "MEMBER" M ON(M.MEMBER_NO = S.MEMBER_NO)
+		WHERE B.MEMBER_NO = ?
+	</entry>
 	
 	
-	<!-- 내 정보 수정(이름, 성별) -->
-	<entry key="updateMember">
+	<!-- 내 정보 수정(이름) -->
+	<entry key="updateMyInfo">
 		UPDATE "MEMBER"
 		SET MEMBER_NM = ?
 		WHERE MEMBER_ID = ?
 	</entry>
+	
+	
+	<!-- 비밀번호 변경 -->
+	<entry key="updatePassword">
+		UPDATE "MEMBER"
+		SET MEMBER_PW = ?
+		WHERE MEMBER_ID = ?
+		AND MEMBER_PW = ?
+	</entry>
+	
+	
+	
+	
+	
+	
 	
 	<entry key="secession">
 		UPDATE "MEMBER" 
@@ -25,11 +48,7 @@
 	
 
 	
-	<entry key="updatePw">
-		UPDATE "MEMBER"
-		SET MEMBER_PW = ?
-		WHERE MEMBER_ID = ?
-	</entry>
+	
 	
 </properties>
 

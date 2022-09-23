@@ -79,6 +79,7 @@ public class MainDAO {
 			pstmt.setString(2, member.getMemberPw());
 			pstmt.setString(3, member.getMemberName());
 			pstmt.setString(4, member.getMemberRRNumber());
+			pstmt.setString(5, member.getPartnerFlag());
 
 			result = pstmt.executeUpdate();
 
@@ -117,6 +118,8 @@ public class MainDAO {
 				loginMember.setMemberName(rs.getString("MEMBER_NM"));
 				loginMember.setMemberRRNumber(rs.getString("MEMBER_RRNUMBER"));
 				loginMember.setEnrollDate(rs.getString("ENROLL_DATE"));	
+				loginMember.setPartnerFlag(rs.getString("PARTNER_FL"));
+				
 			}
 
 		} finally {
