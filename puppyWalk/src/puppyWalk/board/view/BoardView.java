@@ -19,11 +19,10 @@ public class BoardView {
 	private BoardService boardService = new BoardService();
 	private CommentService commentService = new CommentService();
 	private Scanner sc = new Scanner(System.in);
-	private Member loginMember = null;
 	private int input = -1;
 
-	public void mainMenu(Member loginMember) {
-		this.loginMember = loginMember;
+	public void mainMenu() {
+
 
 		do {
 			System.out.println("\n\n******게시판 기능*******");
@@ -65,14 +64,53 @@ public class BoardView {
 		
 		System.out.println("게시글 등록 선택 : ");
 		String content = inputContent();
+		
 
-		Comment comment = new Comment();
-		comment.setCommentContent(content);
-		comment.setBoardNo(board.getBoardNo());
-		comment.setMemberNo(memberNo);
+
+		System.out.print("제목 입력 : ");
+		String boardTitle = sc.nextLine();
+		System.out.println();
+		
+		System.out.print("게시글 타입 입력(훈련/산책/기타) : ");
+		String boardType = sc.nextLine();
+		while(true) {
+			if(boardType.equals("훈련") ||
+					boardType.equals("산책") ||
+					boardType.equals("기타")) break;
+			else
+				System.out.println("\n[(훈련/산책/기타)만 입력해주세요]\n");				
+		}
+		System.out.println();
+		
+		System.out.print("스케줄 불러오기(Y/N) : ");
+		String isSchedule = sc.nextLine();
+		while(true) {
+			if(boardType.equals("Y")) {
+				//스케줄 불러오기 입력///////////////////////////////////////////////
+				// 스케줄 출력함과 동시에 스케줄 번호만 list형태로 저장
+				System.out.print("스케줄 번호 선택 : ");
+				// 입력한 스케줄번호가 list에 없으면 ?
+				break;
+			} 
+			if(boardType.equals("N")) break;
+			else
+				System.out.println("\n[(Y/N)만 입력해주세요]\n");		
+		}
+		
+		
+		System.out.print("내용 입력 : ");
+		String boardContent = inputContent();
+		System.out.println();
+		
+		Board board = new Board();
+		board.setBoardTitle(boardTitle);
+		board.setBoardContent(boardContent);
+		board.setBoardType(boardType);
+		board.setMemberNo(MainView.loginMember.getMemberNo());
+		
 
 		try {
-			int result = commentService.insertComment(comment);
+			int result = boardService.insertBoard(comment);
 			if (result > 0) {
 
 			} else

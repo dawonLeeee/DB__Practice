@@ -2,7 +2,7 @@ package puppyWalk.board.model.dao;
 
 
 
-import static puppyWalk.common.JDBCTemplete.close;
+import static puppyWalk.common.JDBCTemplete.*;
 
 import java.io.FileInputStream;
 import java.sql.Connection;

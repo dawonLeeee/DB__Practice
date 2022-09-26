@@ -22,8 +22,8 @@ public class MemberView {
 	
 	private int input;
 
-	public void memberMenu(Member loginMember) {
-		this.loginMember = loginMember;
+	public void memberMenu() {
+		
 		do {
 			System.out.println("\n\n******회원 메뉴*******");
 			System.out.println("1. 내 정보 조회");
@@ -51,9 +51,7 @@ public class MemberView {
 
 	
 
-	public void partnerMenu(Member loginMember) {
-
-		this.loginMember = loginMember;
+	public void partnerMenu() {
 		do {
 			System.out.println("\n\n******파트너 메뉴*******");
 			System.out.println("1. 내 정보 조회");

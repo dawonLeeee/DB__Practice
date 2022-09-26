@@ -77,12 +77,12 @@ public class MainView {
 
 						switch (input) {
 						case 1:
-							memberView.memberMenu(loginMember);
+							memberView.memberMenu();
 							break;
 						case 2 : //#### break;
-						case 3 : //#### break;
+						case 3 : scheduleView.mainMenu(); break;
 						case 4:
-							boardView.mainMenu(loginMember);
+							boardView.mainMenu();
 							break;
 						// 로그인 -> loginMember != null
 						case 0:
@@ -100,7 +100,7 @@ public class MainView {
 					}
 					if(loginMember != null) {
 						if(loginMember.getPartnerFlag().equals("Y")) { // 파트너 메뉴
-							memberView.partnerMenu(loginMember);
+							memberView.partnerMenu();
 						}
 					}
 				}
