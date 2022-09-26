@@ -8,6 +8,7 @@ import puppyWalk.board.view.BoardView;
 import puppyWalk.main.model.service.MainService;
 import puppyWalk.member.view.MemberView;
 import puppyWalk.member.vo.Member;
+import puppyWalk.schedule.view.ScheduleView;
 
 // 메인화면
 public class MainView {
@@ -16,11 +17,13 @@ public class MainView {
 	private MainService service = new MainService();
 	private MemberView memberView = new MemberView();
 	private BoardView boardView = new BoardView();
+	private ScheduleView scheduleView = new ScheduleView();
 	
 	public static Member loginMember = null; // 로그인된 회원정보 저장한 객체를 참조하는 참조변수
 	
 
 	private int input;
+	
 
 	/**
 	 * 메인 메뉴 출력 메서드

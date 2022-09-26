@@ -56,7 +56,7 @@ public class MemberView {
 			System.out.println("\n\n******파트너 메뉴*******");
 			System.out.println("1. 내 정보 조회");
 			System.out.println("2. 내 정보 수정");
-			System.out.println("3. 비밀번호 변경");
+			System.out.println("3. 비밀번호 변경"); // ok
 			System.out.println("4. 스케줄 등록하기");
 			System.out.println("5. 회원 탈퇴");
 			System.out.println("0. 메뉴 나가기");

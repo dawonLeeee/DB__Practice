@@ -8,6 +8,24 @@ public class Schedule {
 	private String scheduleTime;
 	private String serviceType;
 	private int memberNo;
+	private String memberName;
+	private String isBook;
+
+	public String getIsBook() {
+		return isBook;
+	}
+
+	public void setIsBook(String isBook) {
+		this.isBook = isBook;
+	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
 
 	public Schedule() {
 		// TODO Auto-generated constructor stub
