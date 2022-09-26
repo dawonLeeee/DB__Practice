@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 import puppyWalk.board.vo.Board;
+import puppyWalk.board.vo.Comment;
 
 public class BoardDAO {
 
@@ -35,22 +36,33 @@ public class BoardDAO {
 	}
 	
 	
-	/** 게시판 목록조회
+	/** 게시판 목록조회(제목만)
 	 * @param conn
 	 * @return memberList
 	 * @throws Exception
 	 */
-	public List<Board> selectAllBoard(Connection conn) throws Exception {
+	public List<Board> selectAllBoardTitle(Connection conn, String checkBoardType) throws Exception {
 
 		List<Board> boardList = new ArrayList<>();
+		String sql;
 		try {
-			String sql = prop.getProperty("selectAllBoard");
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			if(checkBoardType.equals("모두")) {
+				sql = prop.getProperty("selectAllBoard1");
+				pstmt = conn.prepareStatement(sql);
+			}else {
+				sql = prop.getProperty("selectAllBoard2");
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, checkBoardType);
+				
+			}
 			
-			if(rs.next()) {
+			rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
 				Board board = new Board();
 				board.setBoardNo(rs.getInt("BOARD_NO"));
+				board.setBoardType(rs.getString("BOARD_TYPE"));
 				board.setBoardTitle(rs.getString("BOARD_TITLE"));
 				board.setBoardContent(rs.getString("BOARD_CONTENT"));
 				board.setMemberName(rs.getString("MEMBER_NM"));
@@ -62,7 +74,7 @@ public class BoardDAO {
 			}
 		} finally {
 			close(rs);
-			close(stmt);
+			close(pstmt);
 		}
 		return boardList;
 	}
@@ -73,12 +85,12 @@ public class BoardDAO {
 	 * @param memberNo
 	 * @return 게시글 정보를 담은 board
 	 */
-	public Board selectBoard(Connection conn, int boardNo) throws Exception{
+	public Board selectOneBoard(Connection conn, int boardNo, int memberNo) throws Exception{
 
 		Board board = null;
 		
 		try {
-			String sql = prop.getProperty("selectBoard");
+			String sql = prop.getProperty("selectOneBoard");
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, boardNo);
 			
@@ -88,13 +100,14 @@ public class BoardDAO {
 			if(rs.next()){
 				board = new Board();
 				board.setBoardNo(rs.getInt("BOARD_NO"));
+				board.setScheduleNo(rs.getInt("SCHEDULE_NO"));
 				board.setBoardTitle(rs.getString("BOARD_TITLE"));
 				board.setBoardContent(rs.getString("BOARD_CONTENT"));
 				board.setMemberName(rs.getString("MEMBER_NM"));
 				board.setMemberNo(rs.getInt("MEMBER_NO"));
 				board.setCreateDate(rs.getString("CREATE_DT"));
 				board.setReadCount(rs.getInt("READ_COUNT"));
-				
+				board.setCommentCount(rs.getInt("COMMENT_COUNT"));
 				
 			}
 		} finally {
@@ -131,6 +144,59 @@ public class BoardDAO {
 		return result;
 		
 	}
+
+
+	/** 게시글 수정
+	 * @param conn
+	 * @param board
+	 * @return
+	 */
+	public int updateBoard(Connection conn, Board board) throws Exception {
+			
+		int result = 0; 
+		
+		try {
+			String sql = prop.getProperty("updateBoard");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, board.getBoardTitle());
+			pstmt.setString(2, board.getBoardContent());
+			pstmt.setInt(3, board.getBoardNo());
+			
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+
+	/** 게시글 삭제
+	 * @param conn
+	 * @param memberNo
+	 * @return
+	 */
+	public int deleteBoard(Connection conn, int boardNo) throws Exception {
+
+		int result = 0; 
+		
+		try {
+			String sql = prop.getProperty("deleteBoard");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, boardNo);
+			
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+
+	
 
 		
 }

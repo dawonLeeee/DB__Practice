@@ -66,7 +66,7 @@ public class MainView {
 						System.out.println("1. 회원 메뉴");
 						System.out.println("2. 파트너 정보 보기");
 						System.out.println("3. 스케줄 예약하기");
-						System.out.println("4. 후기 작성하기");
+						System.out.println("4. 게시글 보기");
 						System.out.println("0. 로그아웃");
 						System.out.println("99. 프로그램 종료");
 
@@ -79,8 +79,8 @@ public class MainView {
 						case 1:
 							memberView.memberMenu(loginMember);
 							break;
-						case 2 : #### break;
-						case 3 : #### break;
+						case 2 : //#### break;
+						case 3 : //#### break;
 						case 4:
 							boardView.mainMenu(loginMember);
 							break;

@@ -51,16 +51,17 @@ public class CommentDAO {
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()){
-				for(Comment comment : commentList) {
-					
-					comment.setCommentNo(rs.getInt("COMMENT_NO"));
-					comment.setCommentContent(rs.getString("COMMENT_CONTENT"));
-					comment.setMemberNo(rs.getInt("MEMBER_NO"));
-					comment.setMemberName(rs.getString("MEMBER_NM"));
-					comment.setCreateDate(rs.getString("CREATE_DT"));
-					
-					commentList.add(comment);
-				}
+				
+				Comment comment = new Comment();
+
+				comment.setCommentNo(rs.getInt("COMMENT_NO"));
+				comment.setCommentContent(rs.getString("COMMENT_CONTENT"));
+				comment.setMemberNo(rs.getInt("MEMBER_NO"));
+				comment.setMemberName(rs.getString("MEMBER_NM"));
+				comment.setCreateDate(rs.getString("CREATE_DT"));
+
+				commentList.add(comment);
+				
 			}
 		} finally {
 			close(rs);
@@ -72,6 +73,81 @@ public class CommentDAO {
 	}
 	
 
+	/** 댓글 등록
+	 * @param conn
+	 * @param comment
+	 * @return
+	 */
+	public int insertComment(Connection conn, Comment comment) throws Exception {
+
+		int result = 0; 
+		
+		try {
+			String sql = prop.getProperty("insertComment");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, comment.getCommentContent());
+			pstmt.setInt(2, comment.getMemberNo());
+			pstmt.setInt(3, comment.getBoardNo());
+			
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+
+	/** 댓글 수정
+	 * @param conn
+	 * @param commentNo
+	 * @param content
+	 * @return
+	 */
+	public int updateComment(Connection conn, int commentNo, String content) throws Exception {
+
+		int result = 0; 
+		
+		try {
+			String sql = prop.getProperty("updateComment");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, content);
+			pstmt.setInt(2, commentNo);
+			
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	
+	/** 댓글 삭제
+	 * @param conn
+	 * @param commentNo
+	 * @param content
+	 * @return
+	 */
+	public int deleteComment(Connection conn, int commentNo) throws Exception {
+
+		int result = 0; 
+		
+		try {
+			String sql = prop.getProperty("deleteComment");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, commentNo);
+			
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
 	
 	
 	
@@ -90,182 +166,6 @@ public class CommentDAO {
 	
 	
 	
-	
-	
-	
-	
-//	/** 게시판 목록조회
-//	 * @param conn
-//	 * @return memberList
-//	 * @throws Exception
-//	 */
-//	public List<Board> selectAllBoard(Connection conn) throws Exception {
-//
-//		List<Board> memberList = new ArrayList<>();
-//		try {
-//			String sql = prop.getProperty("selectAllBoard");
-//			stmt = conn.createStatement();
-//	
-//			rs = stmt.executeQuery(sql);
-//			if(rs.next()) {
-//				Board board = new Board();
-//				board.setBoardNo(rs.getInt("BOARD_NO"));
-//				board.setBoardTitle(rs.getString("BOARD_TITLE"));
-//				board.setBoardContentViews(rs.getInt("BOARD_CONTENT_VIEWS"));
-//				board.setEnrollDate(rs.getString("ENROLL_DATE"));
-//			}
-//		} finally {
-//			close(stmt);
-//		}
-//		return memberList;
-//	}	
-//	/** 내가 쓴 글 조회
-//	 * @param conn
-//	 * @param memberId
-//	 * @return List<Board> memberList
-//	 * @throws Exception
-//	 */
-//	public List<Board> selectMyBoard(Connection conn, String memberId) throws Exception{
-//		
-//		List<Board> memberList = new ArrayList<>();
-//		try {
-//			String sql = prop.getProperty("selectMyBoard");
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setString(1, memberId);
-//	
-//			rs = pstmt.executeQuery();
-//			while(rs.next()) {
-//				Board board = new Board();
-//				board.setBoardNo(rs.getInt("BOARD_NO"));
-//				board.setBoardTitle(rs.getString("BOARD_TITLE"));
-//				board.setBoardContent(rs.getString("BOARD_CONTENT"));
-//				board.setBoardContentViews(rs.getInt("BOARD_CONTENT_VIEWS"));
-//				board.setEnrollDate(rs.getString("ENROLL_DATE"));
-//			}
-//		} finally {
-//			close(pstmt);
-//			close(rs);
-//		}
-//
-//		return memberList;
-//	}
-//
-//
-//	/** 게시글 하나 보여주기
-//	 * @param conn
-//	 * @param boardNo
-//	 * @param memberId
-//	 * @return
-//	 */
-//	public Board selectBoard(Connection conn, int boardNo, String memberId) throws Exception {
-//
-//		Board board = null;
-//		try {
-//			String sql = prop.getProperty("selectBoard");
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setInt(1, boardNo);
-//			pstmt.setString(2, memberId);
-//	
-//			rs = pstmt.executeQuery();
-//			if(rs.next()) {
-//				board = new Board();
-//				board.setBoardNo(boardNo);
-//				board.setBoardTitle(rs.getString("BOARD_TITLE"));
-//				board.setBoardContent(rs.getString("BOARD_CONTENT"));
-//				board.setBoardContentViews(rs.getInt("BOARD_CONTENT_VIEWS"));
-//				board.setEnrollDate(rs.getString("ENROLL_DATE"));
-//			}
-//		} finally {
-//			close(pstmt);
-//			close(rs);
-//		}
-//
-//		return board;
-//	}
-//
-//
-//	/** 게시글 수정
-//	 * @param conn
-//	 * @param boardNo
-//	 * @param boardContent 
-//	 * @param boardTitle 
-//	 * @return 수정된 행의 갯수 result
-//	 */
-//	public int updateBoard(Connection conn, int boardNo, String boardTitle, String boardContent) throws Exception {
-//
-//		int result = 0;
-//		try {
-//			String sql = prop.getProperty("updateBoard");
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setString(1, boardTitle);
-//			pstmt.setString(2, boardContent);
-//			pstmt.setInt(3, boardNo);
-//			
-//			result = pstmt.executeUpdate();
-//			
-//			
-//		} finally {
-//			close(pstmt);
-//		}
-//		return result;
-//	}
-//
-//
-//	/** 게시글 삭제
-//	 * @param conn
-//	 * @param boardNo
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	public int deleteBoard(Connection conn, int boardNo) throws Exception {
-//
-//		int result = 0;
-//		try {
-//			String sql = prop.getProperty("deleteBoard");
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setInt(1, boardNo);
-//			
-//			result = pstmt.executeUpdate();
-//			
-//			
-//		} finally {
-//			close(pstmt);
-//		}
-//		return result;
-//	}
-//
-//
-//	/** 게시글 번호를 입력받아 게시글 하나 보여주기(남의 게시글도)
-//	 * @param conn
-//	 * @param boardNo
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	public Board selectOneBoard(Connection conn, int boardNo) throws Exception {
-//
-//		Board board = null;
-//		try {
-//			String sql = prop.getProperty("selectBoard");
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setInt(1, boardNo);
-//	
-//			rs = pstmt.executeQuery();
-//			if(rs.next()) {
-//				board = new Board();
-//				board.setBoardNo(boardNo);
-//				board.setBoardTitle(rs.getString("BOARD_TITLE"));
-//				board.setBoardContent(rs.getString("BOARD_CONTENT"));
-//				board.setBoardContentViews(rs.getInt("BOARD_CONTENT_VIEWS"));
-//				board.setEnrollDate(rs.getString("ENROLL_DATE"));
-//			}
-//		} finally {
-//			close(pstmt);
-//			close(rs);
-//		}
-//
-//		return board;
-//	}
-//
 
 	
 

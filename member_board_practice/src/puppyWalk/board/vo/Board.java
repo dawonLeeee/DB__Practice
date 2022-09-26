@@ -6,12 +6,14 @@ public class Board {
 	
 	private int boardNo; //게시글 번호
 	private String boardTitle; //게시글 제목
+	private String boardType;
 	private String boardContent; //게시글 내용
 	private String createDate; //게시글 작성일
 	private int readCount; // 조회 수
 	private int memberNo; // 작성자 회원 번호
 	private String memberName; // 작성자 회원 이름
 	private int commentCount; // 댓글 수
+	private int scheduleNo;
 	private List<Comment> commentList;
 	
 	public Board() {
@@ -32,6 +34,14 @@ public class Board {
 
 	public void setBoardTitle(String boardTitle) {
 		this.boardTitle = boardTitle;
+	}
+
+	public String getBoardType() {
+		return boardType;
+	}
+
+	public void setBoardType(String boardType) {
+		this.boardType = boardType;
 	}
 
 	public String getBoardContent() {
@@ -82,6 +92,14 @@ public class Board {
 		this.commentCount = commentCount;
 	}
 
+	public int getScheduleNo() {
+		return scheduleNo;
+	}
+
+	public void setScheduleNo(int scheduleNo) {
+		this.scheduleNo = scheduleNo;
+	}
+
 	public List<Comment> getCommentList() {
 		return commentList;
 	}
@@ -89,6 +107,12 @@ public class Board {
 	public void setCommentList(List<Comment> commentList) {
 		this.commentList = commentList;
 	}
+
+	
+
+	
+
+	
 
 	
 	 
