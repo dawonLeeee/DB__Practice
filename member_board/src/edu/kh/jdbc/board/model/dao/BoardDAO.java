@@ -184,4 +184,107 @@ public class BoardDAO {
 		return result;
 	}
 
+
+
+	/** 게시글 등록
+	 * @param conn
+	 * @param board
+	 * @return
+	 */
+	public int insertBoard(Connection conn, Board board) throws Exception {
+		
+		int result = 0;
+		try {
+			String sql = prop.getProperty("insertBoard");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, board.getBoardNo());
+			pstmt.setString(2, board.getBoardTitle());
+			pstmt.setString(3, board.getBoardContent());
+			pstmt.setInt(4, board.getMemberNo());
+			
+			result = pstmt.executeUpdate();
+		
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+
+	/** 다음 게시글 번호 생성 dao
+	 * @param conn
+	 * @return
+	 */
+	public int nextBoardNo(Connection conn) throws Exception {
+		
+		int boardNo = 0;
+		
+		try {
+			String sql = prop.getProperty("nextBoardNo");
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				boardNo = rs.getInt(1);
+			}
+			
+		} finally {
+			pstmt.close();
+		}
+		
+		
+		return boardNo;
+	}
+
+
+
+	/** 게시글 검색
+	 * @param conn
+	 * @param condition
+	 * @param query
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Board> searchBoard(Connection conn, int condition, String query) throws Exception {
+
+		List<Board> boardList = new ArrayList<>();
+		
+
+		
+		try {
+			String sql = prop.getProperty("searchBoard1")
+						+ prop.getProperty("searchBoard2-" + condition)
+						+ prop.getProperty("searchBoard3");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, query);
+			// 3번(제목+내용)은 ?가 2개 존재하기 때문에 추가 세팅구문 작성.
+			if(condition == 3) pstmt.setString(2, query);
+			
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Board board = new Board();
+				
+				board.setBoardNo(rs.getInt("BOARD_NO"));
+				board.setBoardTitle(rs.getString("BOARD_TITLE"));
+				board.setBoardContent(rs.getString("BOARD_CONTENT"));
+				board.setMemberName(rs.getString("MEMBER_NM"));
+				board.setCreateDate(rs.getString("CREATE_DT"));
+				board.setReadCount(rs.getInt("READ_COUNT"));
+				board.setCommentCount(rs.getInt("COMMENT_COUNT"));
+				
+				boardList.add(board);
+			}
+			
+		} finally {
+			pstmt.close();
+		}
+		
+		
+		return boardList;
+	}
+
 }
