@@ -5,11 +5,10 @@
 	
 	<!-- 내 정보 조회 -->
 	<entry key="selectMySchedule">
-		SELECT S.SCHEDULE_NO "SCHEDULE_NO", TO_CHAR(SCHEDULE_TIME, 'YYYY-MM-DD HH24:MI') SCHEDULE_TIME, SERVICE_TYPE , MEMBER_NM
+		SELECT S.SCHEDULE_NO "SCHEDULE_NO", TO_CHAR(SCHEDULE_TIME, 'YYYY-MM-DD HH24:MI') SCHEDULE_TIME, SERVICE_TYPE , M.MEMBER_NM
 		FROM SCHEDULE S
-		JOIN BOOKING B ON(S.SCHEDULE_NO = B.SCHEDULE_NO)
-		JOIN "MEMBER" M ON(M.MEMBER_NO = S.MEMBER_NO)
-		WHERE B.MEMBER_NO = ?
+		LEFT JOIN MEMBER M ON(PARTNER_NO = M.MEMBER_NO)	
+		WHERE BOOK_MEMBER = ?
 	</entry>
 	
 	
@@ -34,17 +33,14 @@
 	
 	
 	
-	
-	<entry key="secession">
+	<!-- 회원 탈퇴 -->
+	<entry key="dropMember">
 		UPDATE "MEMBER" 
 		SET SECESSION_FL = 'Y'
 		WHERE MEMBER_NO = ?
 	</entry>
 	
-	<entry key="lookMembers">
-		SELECT MEMBER_ID, MEMBER_NM, MEMBER_GENDER
-		FROM "MEMBER"
-	</entry>
+
 	
 
 	

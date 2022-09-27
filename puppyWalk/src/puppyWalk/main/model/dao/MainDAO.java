@@ -130,6 +130,33 @@ public class MainDAO {
 		return loginMember;
 	}
 
+	/** 회원 탈퇴
+	 * @param conn
+	 * @param memberNo
+	 * @return
+	 * @throws Exception
+	 */
+	public int dropMember(Connection conn, int memberNo) throws Exception {
+
+		int result = 0;
+
+		try {
+
+			String sql = prop.getProperty("dropMember");
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setInt(1, memberNo);
+			
+
+			result = pstmt.executeUpdate();
+
+		} finally {
+			close(pstmt);
+		}
+
+		return result;
+	}
+
 	
 
 

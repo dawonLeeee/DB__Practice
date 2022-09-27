@@ -37,9 +37,9 @@ public class MainView {
 				// ctrl + shift + p : 괄호 시작/끝 이동
 				// 로그인 x화면
 				if (loginMember == null) {
-					System.out.println("\n===========================================");
+					System.out.println("\n========================================================");
 					System.out.println("******puppyWalk에 오신걸 환영합니다*******");
-					System.out.println("===========================================");
+					System.out.println("========================================================");
 					System.out.println("1. 로그인");
 					System.out.println("2. 회원가입");
 					System.out.println("0. 프로그램 종료");
@@ -70,6 +70,7 @@ public class MainView {
 						System.out.println("2. 파트너 정보 보기");
 						System.out.println("3. 스케줄 조회/예약하기");
 						System.out.println("4. 게시글 보기");
+						System.out.println("5. 회원 탈퇴");
 						System.out.println("0. 로그아웃");
 						System.out.println("99. 프로그램 종료");
 
@@ -87,7 +88,7 @@ public class MainView {
 						case 4:
 							boardView.mainMenu();
 							break;
-						// 로그인 -> loginMember != null
+						case 5 : dropMember(); break;
 						case 0:
 							loginMember = null;
 							System.out.println("\n[로그아웃 되었습니다]\n");
@@ -119,6 +120,38 @@ public class MainView {
 
 
 
+	/**
+	 * 회원 탈퇴
+	 */
+	private void dropMember() {
+
+		while(true) {
+			System.out.println("\n[정말로 탈퇴하실 건가요? (Y / N) ....ㅠㅠ]\n");
+			String isDrop = sc.nextLine().toUpperCase();
+			if(isDrop.equals("Y")) {
+				try {
+					int result = service.dropMember(MainView.loginMember.getMemberNo());
+					if(result > 0)
+						System.out.println("\n[탈퇴 성공]\n");
+					else
+						System.out.println("\n[탈퇴 실패]\n");
+				} catch(Exception e) {
+					System.out.println("\n<<회원 탈퇴 중 예외 발생>>\n");
+					e.printStackTrace();
+				}
+				break;
+			} else if(isDrop.equals("Y")) {
+				break;
+			} else {
+				System.out.println("\n[(Y / N)중에서만 입력해주세요]\n");
+			}
+		}
+
+	}		
+
+
+
+
 // -------------------------------------------------------------------------------------------	
 	/**
 	 * 로그인 화면
@@ -138,6 +171,9 @@ public class MainView {
 			loginMember = service.login(memberId, memberPw);
 			if (loginMember != null) {
 				System.out.println("\n" + loginMember.getMemberName() + "님, 환영합니다 멍멍!!\n");
+				System.out.println("--------------------------------------------------------");
+				System.out.println();
+				
 			} else // 로그인 실패시
 				System.out.println("[아이디가 없거나 비밀번호가 일치하지 않습니다]");
 		} catch (Exception e) {

@@ -405,7 +405,6 @@ public class ScheduleView {
 			else
 				scheduleTime += sDay;
 
-			System.out.println("scheduleTime" + scheduleTime);
 
 		} catch (InputMismatchException e) {
 			System.out.println("\n<<숫자만 입력해주세요>>\n");

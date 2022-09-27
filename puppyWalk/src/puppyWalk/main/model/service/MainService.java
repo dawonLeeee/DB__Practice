@@ -62,6 +62,24 @@ public class MainService {
 		return loginMember;
 	}
 
+	/** 회원 탈퇴
+	 * @param memberNo
+	 * @return
+	 * @throws Exception
+	 */
+	public int dropMember(int memberNo) throws Exception{
+
+		Connection conn = getConnection();
+		int result = dao.dropMember(conn, memberNo);
+		
+		// 트랜잭션 제어
+		if(result > 0) commit(conn);
+		else			rollback(conn);
+
+		close(conn);
+		return result;
+	}
+
 
 
 

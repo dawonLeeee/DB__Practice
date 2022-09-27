@@ -65,7 +65,7 @@ public class MemberView {
 			sc.nextLine();
 
 			switch (input) {
-			case 1: //selectMyInfo(); break;
+			case 1: selectPartnerInfo(); break;
 			case 2: //updateMember(); break;
 			case 3: updatePassword(); break;
 			case 4: //secession(); break;
@@ -76,6 +76,12 @@ public class MemberView {
 
 		} while (input != 0);
 	}
+
+	
+
+
+
+
 
 // ------------------------------------------------------------------------------------
 
@@ -216,6 +222,42 @@ public class MemberView {
 		}
 	}
 
+//--------------------------------------------------------------------------------
 	
+	/**
+	 * (파트너) 내 정보 조회
+	 */
+	private void selectPartnerInfo() {
+
+System.out.println("\n[내 정보 조회]\n");
+		
+		System.out.println("===========================================");
+		System.out.println("회원 번호 : " + MainView.loginMember.getMemberNo());
+		System.out.println("아이디 : " + MainView.loginMember.getMemberId());
+		System.out.println("이름 : " + MainView.loginMember.getMemberName());
+		System.out.println("성별 : " + (MainView.loginMember.getMemberRRNumber().charAt(7) == 'M' ? "남" : "여"));
+		System.out.println("가입일 : " + MainView.loginMember.getEnrollDate());
+		System.out.println("===========================================");
+		System.out.println("내가 작성한 예약 : ");
+		try {
+			List<Schedule> scheduleList = service.selectPartnerSchedule(MainView.loginMember.getMemberNo());
+			
+			if(scheduleMap.isEmpty())
+				System.out.println("\n[스케줄이 비어 있습니다]\n");
+			else {
+				for(Schedule schedule : scheduleMap.keySet()) {
+					System.out.print("스케줄 번호 : " + schedule.getScheduleNo() + " | ");
+					System.out.println("예약 시간 : " + schedule.getScheduleTime());
+					System.out.print("서비스 분류 : " + schedule.getServiceType() + " | ");
+					System.out.println("파트너 : " + scheduleMap.get(schedule));
+				}
+			}
+			System.out.println("===========================================");
+			
+		} catch(Exception e) {
+			System.out.println("\n[스케줄 조회 중 예외 발생]\n");
+			e.printStackTrace();
+		}
+	}
 
 }

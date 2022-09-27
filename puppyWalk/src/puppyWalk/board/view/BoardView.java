@@ -75,7 +75,7 @@ public class BoardView {
 			if(isSchedule.equals("Y")) {
 				
 				insertReviewBoard();
-				break;
+				return;
 			} 
 			if(isSchedule.equals("N")) break;
 			else
@@ -454,6 +454,8 @@ public class BoardView {
 		
 		try {
 			List<Schedule> scheduleList = scheduleService.searchReviewSchedule(memberNo);
+			System.out.println("------------------------------------------------------------");
+			System.out.println("------------------------------------------------------------");
 			System.out.print("\n[후기 작성 가능한 스케줄 목록]\n");
 			ScheduleView.printAllSchedule(scheduleList);
 			
@@ -462,7 +464,7 @@ public class BoardView {
 				scheduleNumList.add(s.getScheduleNo());
 				}
 			
-			System.out.print("\n[후기를 작성할 스케줄 번호 입력 : ]");
+			System.out.print("\n후기를 작성할 스케줄 번호 입력 : ");
 			int scheduleNo = sc.nextInt();
 			sc.nextLine();
 			
@@ -484,19 +486,19 @@ public class BoardView {
 					
 					while(true) { // 내용입력 가이드
 						System.out.println("\n[내용입력 가이드 이용? (Y / N) : ]");
-						String isGuide = sc.nextLine();
+						String isGuide = sc.nextLine().toUpperCase();
 						if(isGuide.equals("Y")){
 							System.out.println("\n[반려견의 컨디션은 좋았나요? : ]");
-							boardContent += "[Q. 반려견의 컨디션은 좋았나요? : ]\nA : " + inputContent();
+							boardContent += "\n\n[Q. 반려견의 컨디션은 좋았나요? : ]\nA : " + inputContent();
 							
 							System.out.println("\n[파트너는 친절했나요? : ]");
-							boardContent += "[Q. 파트너는 친절했나요? : ]\nA : " + inputContent();
+							boardContent += "\n\n[Q. 파트너는 친절했나요? : ]\nA : " + inputContent();
 							
 							System.out.println("\n[산책/훈련이 전반적으로 만족스러웠나요? : ]");
-							boardContent += "[Q. 산책/훈련이 전반적으로 만족스러웠나요? : ]\nA : " + inputContent();
+							boardContent += "\n\n[Q. 산책/훈련이 전반적으로 만족스러웠나요? : ]\nA : " + inputContent();
 							
 							System.out.println("\n[기타 남기고 싶은 말은? : ]");
-							boardContent += "[Q. 기타 남기고 싶은 말은? : ]\nA : " + inputContent();
+							boardContent += "\n\n[Q. 기타 남기고 싶은 말은? : ]\nA : " + inputContent();
 							break;
 						} else if(isGuide.equals("N")) {
 							boardContent += inputContent();
@@ -538,12 +540,6 @@ public class BoardView {
 							oneBoard = boardService.selectOneBoard(boardNo, memberNo);
 							printOneBoard(oneBoard);
 							
-							System.out.println("=======재귀호출 할꺼야??????========");
-							System.out.println("=======재귀호출 할꺼야??????========");
-							System.out.println("=======재귀호출 할꺼야??????========");
-							System.out.println("=======재귀호출 할꺼야??????========");
-							System.out.println("=======재귀호출 할꺼야??????========");
-							System.out.println("=======재귀호출 할꺼야??????========");
 							
 						} else
 							System.out.println("\n[게시글 등록 실패]\n");
@@ -644,7 +640,7 @@ public class BoardView {
 			if (input.equals("$exit"))
 				break;
 			// 입력된 내용을 content에 누적
-			content += "\n" + input;
+			content += input + "\n" ;
 		}
 
 		return content;
