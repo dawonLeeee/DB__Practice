@@ -196,6 +196,62 @@ public class BoardDAO {
 	}
 
 
+	/** 게시글 boardNo에 쓸 NEXTVAL 구하기
+	 * @param conn
+	 * @return
+	 * @throws Exception
+	 */
+	public int getNextVal(Connection conn)  throws Exception {
+		
+		int result = 0; 
+		try {
+			String sql = prop.getProperty("getNextVal");
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				result = rs.getInt(1);
+			
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return result;
+	}
+
+
+	/** 후기 작성
+	 * @param conn
+	 * @param board
+	 * @return
+	 */
+	public int insertBoard(Connection conn, Board board) throws Exception {
+
+		int result = 0; 
+		try {
+			String sql = prop.getProperty("insertBoard");
+			pstmt = conn.prepareStatement(sql);
+			
+			
+			pstmt.setInt(1, board.getBoardNo());
+			pstmt.setString(2, board.getBoardType());
+			pstmt.setString(3, board.getBoardTitle());
+			pstmt.setString(4, board.getBoardContent());
+			pstmt.setInt(5, board.getMemberNo());
+			
+			if(board.getScheduleNo() != 0)
+				pstmt.setInt(6, board.getScheduleNo());
+			else
+				pstmt.setString(6, null);
+			
+			result = pstmt.executeUpdate();
+
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+
 	
 
 		

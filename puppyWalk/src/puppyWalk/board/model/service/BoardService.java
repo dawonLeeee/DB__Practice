@@ -47,7 +47,6 @@ public class BoardService {
 		Connection conn = getConnection();
 		Board board = dao.selectOneBoard(conn, boardNo, memberNo);
 		
-		System.out.println("점검 /// 보드번호 : " + boardNo);
 		if(board != null) {
 			List<Comment> commentList = commentDAO.selectCommentList(conn, boardNo);
 			board.setCommentList(commentList);
@@ -102,6 +101,36 @@ public class BoardService {
 		if(result > 0) commit(conn);
 		else			rollback(conn);
 
+		close(conn);
+		return result;
+	}
+
+
+	
+
+	/** 게시글 boardNo에 쓸 NEXTVAL 구하기
+	 * @return
+	 */
+	public int getNextVal() throws Exception  {
+
+		Connection conn = getConnection();
+		int result = dao.getNextVal(conn);
+		
+		close(conn);
+		return result;
+	}
+
+
+	/** 후기 작성
+	 * @param board
+	 * @return
+	 * @throws Exception
+	 */
+	public int insertBoard(Board board) throws Exception  {
+
+		Connection conn = getConnection();
+		int result = dao.insertBoard(conn, board);
+		
 		close(conn);
 		return result;
 	}

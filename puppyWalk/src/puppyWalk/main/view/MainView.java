@@ -68,7 +68,7 @@ public class MainView {
 						System.out.println("\n\n******로그인 메뉴*******");
 						System.out.println("1. 회원 메뉴");
 						System.out.println("2. 파트너 정보 보기");
-						System.out.println("3. 스케줄 예약하기");
+						System.out.println("3. 스케줄 조회/예약하기");
 						System.out.println("4. 게시글 보기");
 						System.out.println("0. 로그아웃");
 						System.out.println("99. 프로그램 종료");

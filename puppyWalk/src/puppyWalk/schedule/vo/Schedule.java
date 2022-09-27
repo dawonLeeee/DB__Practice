@@ -73,5 +73,12 @@ public class Schedule {
 		return ScheduleNo == ((Schedule)obj).getScheduleNo();
 	}
 
+	@Override
+	public String toString() {
+
+		return "Schedule [스케줄번호 : " + ScheduleNo + " | 예약시간 : " + scheduleTime + " | 분류 : " + serviceType
+				+ "\n 파트너 : " + memberName  + "]";
+	}
+
 	
 }

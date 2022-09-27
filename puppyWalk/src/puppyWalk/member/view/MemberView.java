@@ -18,7 +18,6 @@ public class MemberView {
 	private Scanner sc = new Scanner(System.in);
 	private MemberService service = new MemberService();
 	private BoardView boardView = new BoardView();
-	private static Member loginMember = null;
 	
 	private int input;
 
@@ -37,10 +36,10 @@ public class MemberView {
 			sc.nextLine();
 
 			switch (input) {
-			case 1: selectMyInfo(); break;
-			case 2: updateMyInfo(); break;
-			case 3: updatePassword(); break;
-			case 4: secession(); break;
+			case 1: selectMyInfo(); break; //ok
+			case 2: updateMyInfo(); break; //ok
+			case 3: updatePassword(); break; //ok
+			case 4: secession(); break; // ok
 			case 0: System.out.println("[메인 메뉴로 이동합니다]\n"); break;
 			default: System.out.println("<<메뉴에 작성된 번호만 입력해주세요>>\n");
 			}
@@ -54,7 +53,7 @@ public class MemberView {
 	public void partnerMenu() {
 		do {
 			System.out.println("\n\n******파트너 메뉴*******");
-			System.out.println("1. 내 정보 조회");
+			System.out.println("1. 내 정보 조회"); 
 			System.out.println("2. 내 정보 수정");
 			System.out.println("3. 비밀번호 변경"); // ok
 			System.out.println("4. 스케줄 등록하기");
@@ -90,21 +89,21 @@ public class MemberView {
 		System.out.println("\n[내 정보 조회]\n");
 		
 		System.out.println("===========================================");
-		System.out.println("회원 번호 : " + loginMember.getMemberNo());
-		System.out.println("아이디 : " + loginMember.getMemberId());
-		System.out.println("이름 : " + loginMember.getMemberName());
-		System.out.println("성별 : " + (loginMember.getMemberRRNumber().charAt(7) == 'M' ? "남" : "여"));
-		System.out.println("가입일 : " + loginMember.getEnrollDate());
+		System.out.println("회원 번호 : " + MainView.loginMember.getMemberNo());
+		System.out.println("아이디 : " + MainView.loginMember.getMemberId());
+		System.out.println("이름 : " + MainView.loginMember.getMemberName());
+		System.out.println("성별 : " + (MainView.loginMember.getMemberRRNumber().charAt(7) == 'M' ? "남" : "여"));
+		System.out.println("가입일 : " + MainView.loginMember.getEnrollDate());
 		System.out.println("===========================================");
 		System.out.println("나의 예약 : ");
 		try {
-			Map<Schedule, String> scheduleMap = service.selectMySchedule(loginMember.getMemberNo());
+			Map<Schedule, String> scheduleMap = service.selectMySchedule(MainView.loginMember.getMemberNo());
 			
 			if(scheduleMap.isEmpty())
 				System.out.println("\n[스케줄이 비어 있습니다]\n");
 			else {
 				for(Schedule schedule : scheduleMap.keySet()) {
-					System.out.print("스케줄 번호 : " + schedule.getScheduleTime() + " | ");
+					System.out.print("스케줄 번호 : " + schedule.getScheduleNo() + " | ");
 					System.out.println("예약 시간 : " + schedule.getScheduleTime());
 					System.out.print("서비스 분류 : " + schedule.getServiceType() + " | ");
 					System.out.println("파트너 : " + scheduleMap.get(schedule));
@@ -132,9 +131,9 @@ public class MemberView {
 		memberName = sc.next();
 
 		try {
-			int result = service.updateMyInfo(loginMember.getMemberId(), memberName);
+			int result = service.updateMyInfo(MainView.loginMember.getMemberId(), memberName);
 			if (result > 0) {
-				loginMember.setMemberName(memberName);
+				MainView.loginMember.setMemberName(memberName);
 				System.out.println("내 정보 수정 완료");
 			}
 			else
@@ -155,7 +154,7 @@ public class MemberView {
 
 		int result = 0;
 
-		System.out.println("loginMember.getMemberPw()" + loginMember.getMemberPw());
+		
 		System.out.print("\n현재 비밀번호 입력 : ");
 		String memberPw = sc.next();
 		String newPw1;
@@ -173,7 +172,7 @@ public class MemberView {
 				else	System.out.println("\n[비밀번호가 일치하지 않습니다]\n");
 			}
 				
-				result = service.updatePassword(loginMember.getMemberId(), memberPw, newPw1);
+				result = service.updatePassword(MainView.loginMember.getMemberId(), memberPw, newPw1);
 				if (result > 0)
 					System.out.println("\n[비밀번호 변경 완료]\n");
 				else
@@ -200,7 +199,7 @@ public class MemberView {
 			if (isSecession.equals("Y")) {
 	
 				try {
-					service.secession(loginMember);
+					service.secession(MainView.loginMember);
 					System.out.println("[회원 탈퇴 완료]");
 					input = 0;
 					MainView.loginMember = null;

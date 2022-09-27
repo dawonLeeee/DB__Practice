@@ -237,40 +237,20 @@ public class ScheduleDAO {
 		return scheduleList;
 	}
 
-	/** 스케줄 예약하기1
+
+
+	/** 스케줄 예약하기
 	 * @param conn
 	 * @param scheduleNo
 	 * @return
 	 */
-	public int bookSchedule1(Connection conn, int scheduleNo) throws Exception {
+	public int bookSchedule(Connection conn, int memberNo, int scheduleNo) throws Exception {
 
 		int result = 0;
 		
 		try {
 			
-			String sql = prop.getProperty("bookSchedule1");
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, scheduleNo);
-			rs = pstmt.executeQuery();
-
-		} finally {
-			close(pstmt);
-		}
-		return result;
-	}
-
-	/** 스케줄 예약하기2
-	 * @param conn
-	 * @param scheduleNo
-	 * @return
-	 */
-	public int bookSchedule2(Connection conn, int memberNo, int scheduleNo) throws Exception {
-
-		int result = 0;
-		
-		try {
-			
-			String sql = prop.getProperty("bookSchedule2");
+			String sql = prop.getProperty("bookSchedule");
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, memberNo);
 			pstmt.setInt(2, scheduleNo);
@@ -280,6 +260,137 @@ public class ScheduleDAO {
 			close(pstmt);
 		}
 		return result;
+	}
+
+	/** 내가 예약한 스케줄 확인
+	 * @param conn
+	 * @param memberNo
+	 * @return
+	 */
+	public List<Schedule> selectMySchedule(Connection conn, int memberNo) throws Exception {
+
+		List<Schedule> scheduleList = new ArrayList<>();
+		
+		try {
+			
+			String sql = prop.getProperty("selectMySchedule");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberNo);
+			rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				Schedule schedule = new Schedule();
+				
+				schedule.setScheduleNo(rs.getInt("SCHEDULE_NO"));
+				schedule.setScheduleTime(rs.getString("SCHEDULE_TIME"));
+				schedule.setServiceType(rs.getString("SERVICE_TYPE"));
+				schedule.setMemberName(rs.getString("MEMBER_NM"));
+				schedule.setIsBook(rs.getString("ISBOOK"));
+				
+				scheduleList.add(schedule);
+			}
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return scheduleList;
+	}
+
+	/** 취소할 수 있는 스케줄 목록 조회
+	 * @param conn
+	 * @param memberNo
+	 * @return
+	 */
+	public List<Schedule> searchDeleteSchedule(Connection conn, int memberNo) throws Exception {
+
+		List<Schedule> scheduleList = new ArrayList<>();
+		
+		try {
+			
+			String sql = prop.getProperty("searchDeleteSchedule");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberNo);
+			rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				Schedule schedule = new Schedule();
+				
+				schedule.setScheduleNo(rs.getInt("SCHEDULE_NO"));
+				schedule.setScheduleTime(rs.getString("SCHEDULE_TIME"));
+				schedule.setServiceType(rs.getString("SERVICE_TYPE"));
+				schedule.setMemberName(rs.getString("MEMBER_NM"));
+				schedule.setIsBook(rs.getString("ISBOOK"));
+				
+				scheduleList.add(schedule);
+			}
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return scheduleList;
+	}
+
+	/** 스케줄 취소
+	 * @param conn
+	 * @param scheduleNo
+	 * @param memberNo
+	 * @return
+	 */
+	public int deleteSchedule(Connection conn, int scheduleNo, int memberNo) throws Exception {
+
+		int result = 0;
+		
+		try {
+			
+			String sql = prop.getProperty("deleteSchedule");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, scheduleNo);
+			pstmt.setInt(2, memberNo);
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+	
+	/** 후기 작성할 수 있는 스케줄 목록 조회
+	 * @param conn
+	 * @param memberNo
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Schedule> searchReviewSchedule(Connection conn, int memberNo) throws Exception {
+
+		List<Schedule> scheduleList = new ArrayList<>();
+		
+		try {
+			
+			String sql = prop.getProperty("searchReviewSchedule");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, memberNo);
+			rs = pstmt.executeQuery();
+			
+			
+			while(rs.next()) {
+				Schedule schedule = new Schedule();
+				
+				schedule.setScheduleNo(rs.getInt("SCHEDULE_NO"));
+				schedule.setScheduleTime(rs.getString("SCHEDULE_TIME"));
+				schedule.setServiceType(rs.getString("SERVICE_TYPE"));
+				schedule.setMemberName(rs.getString("MEMBER_NM"));
+				schedule.setIsBook(rs.getString("ISBOOK"));
+				
+				scheduleList.add(schedule);
+			}
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		return scheduleList;
 	}
 	
 	

@@ -104,15 +104,16 @@ public class ScheduleService {
 
 
 
-	/** 스케줄 예약하기1
+/** 스케줄 예약하기1(BOOKING테이블에 INSERT)
+	 * @param memberNo
 	 * @param scheduleNo
 	 * @return
 	 * @throws Exception
 	 */
-	public int bookSchedule1(int scheduleNo) throws Exception {
+	public int bookSchedule(int memberNo, int scheduleNo) throws Exception {
 
 		Connection conn = getConnection();
-		int result = dao.bookSchedule1(conn, scheduleNo);
+		int result = dao.bookSchedule(conn, memberNo, scheduleNo);
 		
 		close(conn);
 		return result;	
@@ -120,13 +121,64 @@ public class ScheduleService {
 
 
 
-	public int bookSchedule2(int memberNo, int scheduleNo) throws Exception {
+	/** 내가 예약한 스케줄 확인
+	 * @param memberNo
+	 * @return
+	 */
+	public List<Schedule> selectMySchedule(int memberNo) throws Exception {
 
 		Connection conn = getConnection();
-		int result = dao.bookSchedule2(conn, memberNo, scheduleNo);
+		List<Schedule> scheduleList = dao.selectMySchedule(conn, memberNo);
 		
 		close(conn);
-		return result;	
+		return scheduleList;	
+	}
+
+
+
+	/** 취소할 수 있는 스케줄 목록 조회
+	 * @param memberNo
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Schedule> searchDeleteSchedule(int memberNo) throws Exception {
+
+		Connection conn = getConnection();
+		List<Schedule> scheduleList = dao.searchDeleteSchedule(conn, memberNo);
+		
+		close(conn);
+		return scheduleList;	
+	}
+
+
+
+	/** 스케줄 취소
+	 * @param scheduleNo
+	 * @param memberNo
+	 * @return
+	 */
+	public int deleteSchedule(int scheduleNo, int memberNo) throws Exception {
+
+		Connection conn = getConnection();
+		int result = dao.deleteSchedule(conn, scheduleNo, memberNo);
+		
+		close(conn);
+		return result;
+	}
+
+
+
+	/** 후기 작성할 수 있는 스케줄 목록 조회
+	 * @param memberNo
+	 * @return
+	 */
+	public List<Schedule> searchReviewSchedule(int memberNo) throws Exception {
+
+		Connection conn = getConnection();
+		List<Schedule> scheduleList = dao.searchReviewSchedule(conn, memberNo);
+		
+		close(conn);
+		return scheduleList;	
 	}
 
 

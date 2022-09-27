@@ -12,11 +12,14 @@ import puppyWalk.board.model.service.CommentService;
 import puppyWalk.board.vo.Board;
 import puppyWalk.board.vo.Comment;
 import puppyWalk.main.view.MainView;
-import puppyWalk.member.vo.Member;
+import puppyWalk.schedule.model.service.ScheduleService;
+import puppyWalk.schedule.view.ScheduleView;
+import puppyWalk.schedule.vo.Schedule;
 
 public class BoardView {
 
 	private BoardService boardService = new BoardService();
+	private ScheduleService scheduleService = new ScheduleService();
 	private CommentService commentService = new CommentService();
 	private Scanner sc = new Scanner(System.in);
 	private int input = -1;
@@ -28,7 +31,7 @@ public class BoardView {
 			System.out.println("\n\n******게시판 기능*******");
 			System.out.println("1. 게시판 목록조회"); // ok
 			System.out.println("2. 게시글 상세조회"); // ok
-			System.out.println("3. 게시글 작성");
+			System.out.println("3. 게시글 작성"); //ok
 			System.out.println("0. 메뉴 나가기");
 
 			System.out.print("번호 선택 : ");
@@ -56,18 +59,32 @@ public class BoardView {
 	/**
 	 * 게시글 등록
 	 */
-	private void insertBoard() {
+	public void insertBoard() {
 		
 		System.out.println("\n[게시글 등록]\n");
 		
 		int memberNo = MainView.loginMember.getMemberNo();
+		Board board = new Board();
 		
-		System.out.println("게시글 등록 선택 : ");
-		String content = inputContent();
+		
+		
+		while(true) {
+			System.out.print("스케줄 불러오기(Y/N) : ");
+			
+			String isSchedule = sc.nextLine().toUpperCase();
+			if(isSchedule.equals("Y")) {
+				
+				insertReviewBoard();
+				break;
+			} 
+			if(isSchedule.equals("N")) break;
+			else
+				System.out.println("\n[(Y/N)만 입력해주세요]\n");		
+		}
+		
 		
 
-
-		System.out.print("제목 입력 : ");
+		System.out.print("\n제목 입력 : ");
 		String boardTitle = sc.nextLine();
 		System.out.println();
 		
@@ -82,42 +99,44 @@ public class BoardView {
 		}
 		System.out.println();
 		
-		System.out.print("스케줄 불러오기(Y/N) : ");
-		String isSchedule = sc.nextLine();
-		while(true) {
-			if(boardType.equals("Y")) {
-				//스케줄 불러오기 입력///////////////////////////////////////////////
-				// 스케줄 출력함과 동시에 스케줄 번호만 list형태로 저장
-				System.out.print("스케줄 번호 선택 : ");
-				// 입력한 스케줄번호가 list에 없으면 ?
-				break;
-			} 
-			if(boardType.equals("N")) break;
-			else
-				System.out.println("\n[(Y/N)만 입력해주세요]\n");		
-		}
+		
 		
 		
 		System.out.print("내용 입력 : ");
 		String boardContent = inputContent();
 		System.out.println();
 		
-		Board board = new Board();
+		
+		//NEXTVAL 구하기
+		int boardNo = 0;
+		try {
+			boardNo = boardService.getNextVal();
+		} catch(Exception e) {
+			System.out.println("\n<<후기 작성 중 예외가 발생했습니다>>\n");
+			e.printStackTrace();
+		}
+		
+
 		board.setBoardTitle(boardTitle);
 		board.setBoardContent(boardContent);
 		board.setBoardType(boardType);
-		board.setMemberNo(MainView.loginMember.getMemberNo());
+		board.setMemberNo(memberNo);
+		board.setBoardNo(boardNo);
+		
 		
 
 		try {
-			int result = boardService.insertBoard(comment);
-			if (result > 0) {
-
+			int result = boardService.insertBoard(board);
+			if (result > 0) { // insert 성공
+				Board oneBoard = new Board();
+				oneBoard = boardService.selectOneBoard(boardNo, memberNo);
+				printOneBoard(oneBoard);
+			
 			} else
 				System.out.println("\n[댓글 등록 실패]\n");
 
 		} catch (Exception e) {
-			System.out.println("\n<<댓글 내용을 입력하지 않았습니다>>\n");
+			System.out.println("\n<<후기 작성 중 예외가 발생했습니다>>\n");
 			e.printStackTrace();
 		}
 		
@@ -425,6 +444,149 @@ public class BoardView {
 
 
 	/**
+	 * 예약 후 후기 작성
+	 */
+	public void insertReviewBoard() {
+
+		System.out.println("\n[후기 게시글 등록]\n");
+		
+		int memberNo = MainView.loginMember.getMemberNo();
+		
+		try {
+			List<Schedule> scheduleList = scheduleService.searchReviewSchedule(memberNo);
+			System.out.print("\n[후기 작성 가능한 스케줄 목록]\n");
+			ScheduleView.printAllSchedule(scheduleList);
+			
+			List<Integer> scheduleNumList = new ArrayList<>();
+			for(Schedule s : scheduleList) {
+				scheduleNumList.add(s.getScheduleNo());
+				}
+			
+			System.out.print("\n[후기를 작성할 스케줄 번호 입력 : ]");
+			int scheduleNo = sc.nextInt();
+			sc.nextLine();
+			
+			
+			List<Schedule> oneScheduleList = new ArrayList<>();
+			try {
+				oneScheduleList = scheduleService.selectScheduleByNo(scheduleNo);
+				if(oneScheduleList.isEmpty()) {
+					System.out.println("\n[후기작성이 불가능한 스케줄 번호입니다]");
+				}else {
+					System.out.print("제목 입력 : ");
+					String boardTitle = sc.nextLine();
+					System.out.println();
+					
+					
+					System.out.print("내용 입력 : ");
+					String boardContent = "";
+					boardContent += oneScheduleList.toString();
+					
+					while(true) { // 내용입력 가이드
+						System.out.println("\n[내용입력 가이드 이용? (Y / N) : ]");
+						String isGuide = sc.nextLine();
+						if(isGuide.equals("Y")){
+							System.out.println("\n[반려견의 컨디션은 좋았나요? : ]");
+							boardContent += "[Q. 반려견의 컨디션은 좋았나요? : ]\nA : " + inputContent();
+							
+							System.out.println("\n[파트너는 친절했나요? : ]");
+							boardContent += "[Q. 파트너는 친절했나요? : ]\nA : " + inputContent();
+							
+							System.out.println("\n[산책/훈련이 전반적으로 만족스러웠나요? : ]");
+							boardContent += "[Q. 산책/훈련이 전반적으로 만족스러웠나요? : ]\nA : " + inputContent();
+							
+							System.out.println("\n[기타 남기고 싶은 말은? : ]");
+							boardContent += "[Q. 기타 남기고 싶은 말은? : ]\nA : " + inputContent();
+							break;
+						} else if(isGuide.equals("N")) {
+							boardContent += inputContent();
+							break;
+						}
+						else	System.out.println("\n[(Y / N)만 입력해주세요]\n");
+					}
+					
+					String serviceType = "";
+					for(Schedule s : scheduleList) {
+						if(s.getScheduleNo() == scheduleNo) {
+							serviceType = s.getServiceType();
+							break;
+						}
+					}
+
+					//NEXTVAL 구하기
+					int boardNo = 0;
+					try {
+						boardNo = boardService.getNextVal();
+					} catch(Exception e) {
+						System.out.println("\n<<후기 작성 중 예외가 발생했습니다>>\n");
+						e.printStackTrace();
+					}
+					
+					Board board = new Board();
+					board.setBoardNo(boardNo);
+					board.setBoardTitle(boardTitle);
+					board.setBoardContent(boardContent);
+					board.setBoardType(serviceType);
+					board.setMemberNo(memberNo);
+					board.setScheduleNo(scheduleNo);
+					
+
+					try {
+						int result = boardService.insertBoard(board);
+						if (result > 0) {
+							Board oneBoard = new Board();
+							oneBoard = boardService.selectOneBoard(boardNo, memberNo);
+							printOneBoard(oneBoard);
+							
+							System.out.println("=======재귀호출 할꺼야??????========");
+							System.out.println("=======재귀호출 할꺼야??????========");
+							System.out.println("=======재귀호출 할꺼야??????========");
+							System.out.println("=======재귀호출 할꺼야??????========");
+							System.out.println("=======재귀호출 할꺼야??????========");
+							System.out.println("=======재귀호출 할꺼야??????========");
+							
+						} else
+							System.out.println("\n[게시글 등록 실패]\n");
+
+					} catch (Exception e) {
+						System.out.println("\n<<게시글 내용을 입력하지 않았습니다>>\n");
+						e.printStackTrace();
+					}
+				}
+			} catch(Exception e) {
+				System.out.println("\n<<후기 작성 중 예외가 발생했습니다>>\n");
+				e.printStackTrace();
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+				
+				
+				
+				
+			
+				
+			
+			
+		} catch (Exception e) {
+			System.out.println("\n<<후기 작성 중 예외가 발생했습니다>>\n");
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+	
+	/**
 	 * 게시글 하나를 출력하는 메서드
 	 * 
 	 * @param boardList
@@ -520,5 +682,7 @@ public class BoardView {
 		}
 
 	}
+
+	
 
 }

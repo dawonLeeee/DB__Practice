@@ -74,8 +74,23 @@ ORDER BY 2 DESC, 1 DESC
 	
 	<!-- 게시글 삭제 -->
 	<entry key="deleteBoard">
-		DELETE FROM BOARD
+		UPDATE "BOARD" SET
+		DELETE_FL = 'Y'
 		WHERE BOARD_NO = ?
+	</entry>
+	
+	
+		<!-- NEXTVAL 구하는 구문 -->
+	<entry key="getNextVal">
+		SELECT SEQ_BOARD_NO.NEXTVAL 
+		FROM DUAL
+	</entry>
+	
+	
+			<!-- 후기 작성 -->
+	<entry key="insertBoard">
+		INSERT INTO "BOARD" VALUES(?, ?, ?, ?, 
+		DEFAULT, DEFAULT,DEFAULT, ?, ?)
 	</entry>
 	
 </properties>
