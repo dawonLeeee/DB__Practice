@@ -260,42 +260,16 @@ public class MemberDAO {
 			
 			String sql = prop.getProperty("updateDogInfo");
 			pstmt = conn.prepareStatement(sql);
-			
-			if(!dogInfo.getDogName().equals("")) {
-				pstmt.setString(1, dogInfo.getDogName());
-			} else
-				pstmt.setNull(1, java.sql.Types.VARCHAR);
-			
-			if(!dogInfo.getDogGender().equals("")) {
-				pstmt.setString(2, dogInfo.getDogGender());
-			} else
-				pstmt.setNull(2, java.sql.Types.CHAR);
-			
-			if(!dogInfo.getDogComment().equals("")) {
-				pstmt.setString(4, dogInfo.getDogComment());
-			} else
-				pstmt.setNull(4, java.sql.Types.VARCHAR);
-			
-			if(!dogInfo.getDogAlert().equals("")) {
-				pstmt.setString(5, dogInfo.getDogAlert());
-			} else
-				pstmt.setNull(5, java.sql.Types.VARCHAR);
-			
-			if(!dogInfo.getDogVar().equals("")) {
-				pstmt.setString(6, dogInfo.getDogVar());
-			} else
-				pstmt.setNull(6, java.sql.Types.VARCHAR);
-			
 
+			pstmt.setString(1, dogInfo.getDogName());
+			pstmt.setString(2, dogInfo.getDogGender());
+			pstmt.setString(4, dogInfo.getDogComment());
+			pstmt.setString(5, dogInfo.getDogAlert());
+			pstmt.setString(6, dogInfo.getDogVar());
 			pstmt.setInt(3, dogInfo.getDogAge());
 			pstmt.setInt(7, memberNo);
 			
-			
-			
-			
-			
-			
-			
+
 			result = pstmt.executeUpdate();
 			
 		} finally {

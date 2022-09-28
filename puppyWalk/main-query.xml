@@ -27,6 +27,13 @@
 	</entry>
 	
 	
+		<!-- 파트너 정보 확인 -->
+	<entry key="showPartnerInfo">
+		SELECT MEMBER_NM, PARTNER_INTRO
+		FROM PARTNER
+		JOIN MEMBER USING(MEMBER_NO)
+	</entry>
+	
 	
 </properties>
 

@@ -9,10 +9,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import puppyWalk.common.JDBCTemplete;
 import puppyWalk.member.vo.Member;
+import puppyWalk.partner.vo.Partner;
+import puppyWalk.schedule.vo.Schedule;
 
 // DAO(Data Access Object) : DB연결용 객체
 public class MainDAO {
@@ -156,6 +161,37 @@ public class MainDAO {
 		}
 
 		return result;
+	}
+
+	/** 파트너 정보 확인
+	 * @param conn
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Partner> showPartnerInfo(Connection conn) throws Exception {
+
+		List<Partner> partnerList = new ArrayList<>();
+		
+		try {
+			// 2. SQL 얻어오기
+			String sql = prop.getProperty("showPartnerInfo");
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				Partner p = new Partner();
+				p.setMemberName(rs.getString("MEMBER_NM"));
+				p.setPartnerIntro(rs.getString("PARTNER_INTRO"));
+				
+				partnerList.add(p);
+			}
+
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+
+		return partnerList;
 	}
 
 	

@@ -3,25 +3,40 @@ package puppyWalk.partner.vo;
 public class Partner {
 
 	private int memberNo;
+	private String memberName;
 	private String partnerIntro;
 	
 	public Partner() {
 		// TODO Auto-generated constructor stub
 	}
 
-	private int getMemberNo() {
+	
+	
+	public String getMemberName() {
+		return memberName;
+	}
+
+
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+
+
+
+	public int getMemberNo() {
 		return memberNo;
 	}
 
-	private void setMemberNo(int memberNo) {
+	public void setMemberNo(int memberNo) {
 		this.memberNo = memberNo;
 	}
 
-	private String getPartnerIntro() {
+	public String getPartnerIntro() {
 		return partnerIntro;
 	}
 
-	private void setPartnerIntro(String partnerIntro) {
+	public void setPartnerIntro(String partnerIntro) {
 		this.partnerIntro = partnerIntro;
 	}
 	

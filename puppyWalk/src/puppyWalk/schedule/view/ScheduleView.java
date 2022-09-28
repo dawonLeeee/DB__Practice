@@ -216,6 +216,7 @@ public class ScheduleView {
 			
 
 			bookSchedule();
+
 	}
 
 	
@@ -249,15 +250,6 @@ public class ScheduleView {
 			System.out.println("<<메뉴에 작성된 번호만 입력해주세요>>\n");
 		}
 
-		
-		while(true) {
-			System.out.println("\n스케줄을 예약하시겠습니까?(Y / N) : \n");
-			String isBook = sc.nextLine().toUpperCase();
-			if(isBook.equals("Y"))
-				bookSchedule();
-			else if(isBook.equals("N")) break;
-			else System.out.println("\n<<(Y / N)만 입력해주세요>>\n");
-		}
 	}
 
 	/**
@@ -485,8 +477,19 @@ public class ScheduleView {
 	
 				System.out.println();
 			}
+			
+			
 		}
 		
 	}
+	
+//	while(true) {
+//		System.out.println("\n스케줄을 예약하시겠습니까?(Y / N) : \n");
+//		String isBook = sc.nextLine().toUpperCase();
+//		if(isBook.equals("Y"))
+//			bookSchedule();
+//		else if(isBook.equals("N")) break;
+//		else System.out.println("\n<<(Y / N)만 입력해주세요>>\n");
+//	}
 
 }

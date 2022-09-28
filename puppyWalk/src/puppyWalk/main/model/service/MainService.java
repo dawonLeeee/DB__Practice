@@ -4,9 +4,13 @@ import static puppyWalk.common.JDBCTemplete.*;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import puppyWalk.main.model.dao.MainDAO;
 import puppyWalk.member.vo.Member;
+import puppyWalk.partner.vo.Partner;
+import puppyWalk.schedule.vo.Schedule;
 
 // 데이터 가공, 트랜잭션 처리
 public class MainService {
@@ -78,6 +82,16 @@ public class MainService {
 
 		close(conn);
 		return result;
+	}
+
+	public List<Partner> showPartnerInfo() throws Exception {
+
+		Connection conn = getConnection();
+		List<Partner> partnerList = dao.showPartnerInfo(conn);
+		
+		
+		close(conn);
+		return partnerList;
 	}
 
 

@@ -59,7 +59,7 @@ public class MemberView {
 			System.out.println("1. 내 정보 조회"); //ok
 			System.out.println("2. 내 정보 수정");
 			System.out.println("3. 비밀번호 변경"); // ok
-			System.out.println("4. 스케줄 등록하기");
+			System.out.println("4. 스케줄 등록/수정하기");
 			System.out.println("5. 회원 탈퇴");
 			System.out.println("0. 로그아웃");
 			System.out.println("99. 프로그램 종료");
@@ -73,7 +73,7 @@ public class MemberView {
 			case 2: updatePartnerInfo(); break;
 			case 3: updatePassword(); break;
 			case 4: updateSchedule(); break;
-			case 5: //secession(); break;
+			case 5: secession(); break;
 			case 0:
 				MainView.loginMember = null;
 				System.out.println("\n[로그아웃 되었습니다]\n");
@@ -547,23 +547,24 @@ public class MemberView {
 	/**
 	 * 내 반려견 정보 수정
 	 */
-	private void updateDogInfo() {
+	public void updateDogInfo() {
 		
 		System.out.println("[내 반려견 정보 수정]");
 		Dog dogInfo = new Dog();
 		
+		Dog currDogInfo = new Dog();
 		try {
-			Dog currDogInfo = service.selectDogInfo(MainView.loginMember.getDogNo());
+			currDogInfo = service.selectDogInfo(MainView.loginMember.getDogNo());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		String dogName = "";
-		String dogGender = "";
-		int dogAge = -1;
-		String dogComment = "";
-		String dogAlert = "";
-		String dogVar = "";
+		String dogName = currDogInfo.getDogName();
+		String dogGender = currDogInfo.getDogGender();
+		int dogAge = currDogInfo.getDogAge();
+		String dogComment = currDogInfo.getDogComment();
+		String dogAlert = currDogInfo.getDogAlert();
+		String dogVar = currDogInfo.getDogVar();
 		
 		
 		
@@ -588,16 +589,16 @@ public class MemberView {
 				switch (input) {
 				case 1: // 이름 변경
 					System.out.print("변경할 이름 : ");
-					dogName += sc.nextLine();
+					dogName = sc.nextLine();
 					break;
 				case 2: // 종 변경
 					System.out.print("종 변경: ");
-					dogVar += sc.nextLine();
+					dogVar = sc.nextLine();
 					break;
 				case 3: // 성별 변경
 					while(true) {
 						System.out.print("성별 변경 (M/F): ");
-						dogGender += sc.nextLine();
+						dogGender = sc.nextLine();
 						if(dogGender.equals("M") || dogGender.equals("F"))
 							break;
 						else
@@ -607,16 +608,16 @@ public class MemberView {
 					break;
 				case 4: // 나이 변경
 					System.out.print("나이 변경: ");
-					dogAge += sc.nextInt();
+					dogAge = sc.nextInt();
 					sc.nextLine();
 					break;
 				case 5: // 소개 변경
 					System.out.print("소개 변경: ");
-					dogComment += boardView.inputContent();
+					dogComment = boardView.inputContent();
 					break;
 				case 6: // 주의사항 변경
 					System.out.print("주의사항 변경: ");
-					dogAlert += boardView.inputContent();
+					dogAlert = boardView.inputContent();
 					break;
 				case 0 : break;
 				default:

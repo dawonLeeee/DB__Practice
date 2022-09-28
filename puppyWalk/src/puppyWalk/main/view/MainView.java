@@ -2,13 +2,17 @@ package puppyWalk.main.view;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import puppyWalk.board.view.BoardView;
 import puppyWalk.main.model.service.MainService;
 import puppyWalk.member.view.MemberView;
 import puppyWalk.member.vo.Member;
+import puppyWalk.partner.vo.Partner;
 import puppyWalk.schedule.view.ScheduleView;
+import puppyWalk.schedule.vo.Schedule;
 
 // 메인화면
 public class MainView {
@@ -83,7 +87,7 @@ public class MainView {
 						case 1:
 							memberView.memberMenu();
 							break;
-						case 2 : //#### break;
+						case 2 : showPartnerInfo();
 						case 3 : scheduleView.mainMenu(); break;
 						case 4:
 							boardView.mainMenu();
@@ -115,6 +119,35 @@ public class MainView {
 
 		} while (input != 0);
 
+	}
+
+
+
+
+	/**
+	 * 파트너 정보 조회
+	 */
+	private void showPartnerInfo() {
+
+		System.out.println("[파트너 정보 조회]");
+
+		try {
+			List<Partner> partnerList = service.showPartnerInfo();
+			if (!partnerList.isEmpty()) {
+				
+				System.out.println("\n========================================================");
+				for(Partner p : partnerList) {
+					System.out.println("파트너 이름 : " + p.getMemberName());
+					System.out.println("파트너 소개 : " + p.getPartnerIntro());
+					System.out.println("========================================================");
+				}
+				
+			} else // 로그인 실패시
+				System.out.println("[파트너로 등록한 회원이 한 명도 없습니다]");
+		} catch (Exception e) {
+			System.out.println("\n<<파트너 정보 조회 중 예외 발생>>\n");
+			e.printStackTrace();
+		}
 	}
 
 
@@ -237,6 +270,19 @@ public class MainView {
 				partnerFlag = sc.nextLine();
 				if(partnerFlag.equals("Y") || partnerFlag.equals("N")) break;
 				else	System.out.println("\n[(Y/N)만 입력해주세요]\n");
+			}
+			
+			
+			System.out.print("반려견 정보를 등록하시겠습니까? (Y/N) : ");
+			String dogFlag;
+			while(true) {
+				dogFlag = sc.nextLine();
+				if(dogFlag.equals("Y")) {
+					memberView.updateDogInfo();
+					break;
+				} else if(dogFlag.equals("N")) {
+					break;
+				} else	System.out.println("\n[(Y/N)만 입력해주세요]\n");
 			}
 			
 			
