@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import puppyWalk.dog.vo.Dog;
 import puppyWalk.member.vo.Member;
+import puppyWalk.partner.vo.Partner;
 import puppyWalk.schedule.vo.Schedule;
 
 public class MemberDAO {
@@ -66,7 +68,7 @@ public class MemberDAO {
 		}
 		
 		close(rs);
-		close(stmt);
+		close(pstmt);
 		
 		return scheduleMap;
 	}
@@ -78,12 +80,12 @@ public class MemberDAO {
 	 * @param memberGender
 	 * @return
 	 */
-	public int updateMyInfo(Connection conn, String memberId, String memberName) throws Exception{
+	public int updateMyInfo(Connection conn, int memberNo, String memberName) throws Exception{
 
 		String sql = prop.getProperty("updateMyInfo");
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, memberName);
-		pstmt.setString(2, memberId);
+		pstmt.setInt(2, memberNo);
 		
 		int result = pstmt.executeUpdate();
 		
@@ -100,14 +102,14 @@ public class MemberDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public int updatePassword(Connection conn, String memberId, String memberPw, String newPw) throws Exception{
+	public int updatePassword(Connection conn, int memberNo, String memberPw, String newPw) throws Exception{
 
 		int result = 0;
 		try {
 			String sql = prop.getProperty("updatePassword");
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, newPw);
-			pstmt.setString(2, memberId);
+			pstmt.setInt(2, memberNo);
 			pstmt.setString(3, memberPw);
 			result = pstmt.executeUpdate();
 		} finally {
@@ -116,37 +118,6 @@ public class MemberDAO {
 		
 		return result;
 	}
-	
-	
-	
-	///////////////////////////////////////////////////////////////////
-
-//	/** 회원 목록 조회(아이디, 이름, 성별)
-//	 * @param conn
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	public ArrayList<Member> lookMembers(Connection conn) throws Exception {
-//		
-//		ArrayList<Member> memberList = new ArrayList<>();
-//		try {
-//			String sql = prop.getProperty("lookMembers");
-//			stmt = conn.createStatement();
-//
-//			rs = stmt.executeQuery(sql);
-//			while (rs.next()) {
-//				memberList.add(new Member(rs.getString("MEMBER_ID"), rs.getString("MEMBER_NM")));
-//			}
-//		} finally {
-//			close(rs);
-//			close(stmt);
-//		}
-//		
-//		return memberList;
-//	}
-
-
-	
 	
 
 	
@@ -171,6 +142,248 @@ public class MemberDAO {
 			close(pstmt);
 		}
 		return result;
+	}
+
+
+
+	/** 파트너가 작성한 예약 조회
+	 * @param conn
+	 * @param memberNo
+	 * @return
+	 */
+	public List<Schedule> selectPartnerSchedule(Connection conn, int memberNo, String num) throws Exception{
+
+		List<Schedule> scheduleList = new ArrayList<>();
+		String sql = prop.getProperty("selectPartnerSchedule" + num);
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, memberNo);
+		
+		
+
+		rs = pstmt.executeQuery();
+		while(rs.next()) {
+			
+			Schedule schedule = new Schedule();
+			schedule.setScheduleNo(rs.getInt("SCHEDULE_NO"));
+			schedule.setScheduleTime(rs.getString("SCHEDULE_TIME"));
+			schedule.setServiceType(rs.getString("SERVICE_TYPE"));
+			schedule.setIsBook(rs.getString("ISBOOK"));
+			schedule.setMemberName(rs.getString("MEMBER_NM"));
+			
+			scheduleList.add(schedule);
+
+		}
+		
+		close(rs);
+		close(pstmt);
+		
+		return scheduleList;
+	}
+
+
+
+	/** 파트너 정보 소개
+	 * @param conn
+	 * @param memberNo
+	 * @return
+	 */
+	public Member selectPartnerInfo(Connection conn, int memberNo) throws Exception{
+
+		Member partnerInfo = null;
+		String sql = prop.getProperty("selectPartnerInfo");
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, memberNo);
+		
+		rs = pstmt.executeQuery();
+		if(rs.next()) {
+			
+			partnerInfo = new Member();
+			partnerInfo.setPartnerIntro(rs.getString("PARTNER_INTRO"));
+			partnerInfo.setPartnerGrade(rs.getInt("PARTNER_GRADE"));
+			
+
+		}
+		
+		close(rs);
+		close(pstmt);
+		
+		return partnerInfo;
+	}
+
+
+
+	/** 반려견 정보 조회
+	 * @param conn
+	 * @param dogNo
+	 * @return
+	 * @throws Exception
+	 */
+	public Dog selectDogInfo(Connection conn, int dogNo) throws Exception {
+
+		Dog dogInfo = null;
+		String sql = prop.getProperty("selectDogInfo");
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setInt(1, dogNo);
+		
+		rs = pstmt.executeQuery();
+		if(rs.next()) {
+			
+			dogInfo = new Dog();
+			dogInfo.setDogName((rs.getString("DOG_NAME")== null? "정보 없음": rs.getString("DOG_NAME")));
+			dogInfo.setDogGender((rs.getString("DOG_GENDER")== null? "정보 없음": rs.getString("DOG_GENDER")));
+			dogInfo.setDogAge(rs.getInt("DOG_AGE"));
+			dogInfo.setDogComment((rs.getString("DOG_COMMENT")== null? "정보 없음": rs.getString("DOG_COMMENT")));
+			dogInfo.setDogAlert((rs.getString("DOG_ALERT")== null? "정보 없음": rs.getString("DOG_ALERT")));
+			dogInfo.setDogVar((rs.getString("DOG_VAR")== null? "정보 없음": rs.getString("DOG_VAR")));
+
+		}
+		
+		close(rs);
+		close(pstmt);
+		
+		return dogInfo;
+	}
+
+
+
+	/** 반려견 정보 수정
+	 * @param conn
+	 * @param memberNo
+	 * @param dogInfo
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateDogInfo(Connection conn, int memberNo, Dog dogInfo) throws Exception {
+
+		int result = 0;
+		try {
+			
+			String sql = prop.getProperty("updateDogInfo");
+			pstmt = conn.prepareStatement(sql);
+			
+			if(!dogInfo.getDogName().equals("")) {
+				pstmt.setString(1, dogInfo.getDogName());
+			} else
+				pstmt.setNull(1, java.sql.Types.VARCHAR);
+			
+			if(!dogInfo.getDogGender().equals("")) {
+				pstmt.setString(2, dogInfo.getDogGender());
+			} else
+				pstmt.setNull(2, java.sql.Types.CHAR);
+			
+			if(!dogInfo.getDogComment().equals("")) {
+				pstmt.setString(4, dogInfo.getDogComment());
+			} else
+				pstmt.setNull(4, java.sql.Types.VARCHAR);
+			
+			if(!dogInfo.getDogAlert().equals("")) {
+				pstmt.setString(5, dogInfo.getDogAlert());
+			} else
+				pstmt.setNull(5, java.sql.Types.VARCHAR);
+			
+			if(!dogInfo.getDogVar().equals("")) {
+				pstmt.setString(6, dogInfo.getDogVar());
+			} else
+				pstmt.setNull(6, java.sql.Types.VARCHAR);
+			
+
+			pstmt.setInt(3, dogInfo.getDogAge());
+			pstmt.setInt(7, memberNo);
+			
+			
+			
+			
+			
+			
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+
+	/** 파트너 소개 수정
+	 * @param conn
+	 * @param memberNo
+	 * @param partnerIntro
+	 * @return
+	 * @throws Exception
+	 */
+	public int updatePartnerInfo(Connection conn, int memberNo, String partnerIntro) throws Exception {
+
+		int result = 0;
+		try {
+			String sql = prop.getProperty("updatePartnerInfo");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, partnerIntro);
+			pstmt.setInt(2, memberNo);
+			
+			result = pstmt.executeUpdate();
+			
+			
+		} finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+
+
+	/** 파트너-스케줄 등록
+	 * @param conn
+	 * @param memberNo
+	 * @param mySchedule
+	 * @return
+	 */
+	public int updateSchedule(Connection conn, int memberNo, Schedule mySchedule) throws Exception {
+
+		int result = 0;
+		
+		boolean isFuture = isFuture(conn, mySchedule);
+		
+		if(isFuture) {
+			try {
+				String sql = prop.getProperty("updateSchedule");
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, mySchedule.getScheduleTime());
+				pstmt.setString(2, mySchedule.getServiceType());
+				pstmt.setInt(3, memberNo);
+				
+				result = pstmt.executeUpdate();
+				
+				
+			} finally {
+				close(pstmt);
+			}
+		}
+		return result;
+	}
+	
+	public boolean isFuture(Connection conn, Schedule mySchedule) throws Exception  {
+		
+		boolean result = false;
+		
+		try {
+			String sql = prop.getProperty("isPast");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, mySchedule.getScheduleTime());
+			
+			
+			rs = pstmt.executeQuery();
+			if(rs.next())
+				result = true;
+			
+			
+		} finally {
+			close(pstmt);
+		}
+		return result;
+		
 	}
 
 

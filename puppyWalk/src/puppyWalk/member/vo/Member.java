@@ -8,6 +8,7 @@ import puppyWalk.schedule.vo.Schedule;
 public class Member {
 
 	private int memberNo;
+	private int dogNo;
 	private String memberId;
 	private String memberPw;
 	private String memberName;
@@ -18,9 +19,50 @@ public class Member {
 	private int scheduleNo;
 	private List<Schedule> scheduleList;
 	
+	private String partnerIntro;
+	private int partnerGrade;
+	
 	public Member() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+
+	public int getDogNo() {
+		return dogNo;
+	}
+
+
+
+	public void setDogNo(int dogNo) {
+		this.dogNo = dogNo;
+	}
+
+
+
+	public String getPartnerIntro() {
+		return partnerIntro;
+	}
+
+
+
+	public void setPartnerIntro(String partnerIntro) {
+		this.partnerIntro = partnerIntro;
+	}
+
+
+
+	public int getPartnerGrade() {
+		return partnerGrade;
+	}
+
+
+
+	public void setPartnerGrade(int partnerGrade) {
+		this.partnerGrade = partnerGrade;
+	}
+
+
 
 	public int getMemberNo() {
 		return memberNo;
@@ -101,6 +143,10 @@ public class Member {
 	public void setScheduleList(List<Schedule> scheduleList) {
 		this.scheduleList = scheduleList;
 	}
+
+
+
+
 
 	 
 	

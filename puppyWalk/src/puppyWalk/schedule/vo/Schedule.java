@@ -1,6 +1,10 @@
 package puppyWalk.schedule.vo;
 
+import java.util.List;
 import java.util.Objects;
+
+import puppyWalk.member.vo.Member;
+import puppyWalk.partner.vo.Partner;
 
 public class Schedule {
 
@@ -10,6 +14,17 @@ public class Schedule {
 	private int memberNo;
 	private String memberName;
 	private String isBook;
+	private List<Member> partnerInfoList; 
+
+	
+	
+	public List<Member> getPartnerInfoList() {
+		return partnerInfoList;
+	}
+
+	public void setPartnerInfoList(List<Member> partnerInfoList) {
+		this.partnerInfoList = partnerInfoList;
+	}
 
 	public String getIsBook() {
 		return isBook;

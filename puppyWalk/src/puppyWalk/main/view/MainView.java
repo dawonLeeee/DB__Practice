@@ -94,10 +94,10 @@ public class MainView {
 							System.out.println("\n[로그아웃 되었습니다]\n");
 							input = -1; // do-while문이 종료되지 않도록 함
 							break;
-						case 99: {
+						case 99: 
 							System.out.println("<<프로그램 종료>>");
 							System.exit(0);
-						}
+						
 						default:
 							System.out.println("<<메뉴에 작성된 번호만 입력해주세요>>\n");
 						}

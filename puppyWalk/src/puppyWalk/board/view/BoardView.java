@@ -631,7 +631,7 @@ public class BoardView {
 	 * 
 	 * @return 입력된 문자열
 	 */
-	private String inputContent() {
+	public String inputContent() {
 		String content = "";
 		String input = null;
 		System.out.println("입력 종료시 ($exit) 입력 : \n");

@@ -119,6 +119,7 @@ public class MainDAO {
 				loginMember.setMemberRRNumber(rs.getString("MEMBER_RRNUMBER"));
 				loginMember.setEnrollDate(rs.getString("ENROLL_DATE"));	
 				loginMember.setPartnerFlag(rs.getString("PARTNER_FL"));
+				loginMember.setDogNo(rs.getInt("DOG_NO"));
 				
 			}
 

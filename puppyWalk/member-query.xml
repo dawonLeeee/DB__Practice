@@ -16,7 +16,7 @@
 	<entry key="updateMyInfo">
 		UPDATE "MEMBER"
 		SET MEMBER_NM = ?
-		WHERE MEMBER_ID = ?
+		WHERE MEMBER_NO = ?
 	</entry>
 	
 	
@@ -24,15 +24,12 @@
 	<entry key="updatePassword">
 		UPDATE "MEMBER"
 		SET MEMBER_PW = ?
-		WHERE MEMBER_ID = ?
+		WHERE MEMBER_NO = ?
 		AND MEMBER_PW = ?
 	</entry>
 	
 	
-	
-	
-	
-	
+
 	<!-- 회원 탈퇴 -->
 	<entry key="dropMember">
 		UPDATE "MEMBER" 
@@ -41,9 +38,81 @@
 	</entry>
 	
 
+	<!-- 파트너 예약정보 조회(미래) -->
+	<entry key="selectPartnerSchedule1">
+		SELECT S.SCHEDULE_NO "SCHEDULE_NO", TO_CHAR(SCHEDULE_TIME, 'YYYY-MM-DD HH24') || '시 ~' || (TO_CHAR(SCHEDULE_TIME, 'HH24')+2) || '시' AS "SCHEDULE_TIME", SERVICE_TYPE ,
+		CASE WHEN BOOK_MEMBER > 0	THEN 'Y' ELSE 'N' END "ISBOOK", MEMBER_NM
+		FROM SCHEDULE S
+		LEFT JOIN MEMBER M ON(BOOK_MEMBER = M.MEMBER_NO)	
+		WHERE PARTNER_NO = ?
+		AND SCHEDULE_TIME >= SYSDATE 
+		ORDER BY 4, 2
+	</entry>
 	
+	<!-- 파트너 예약정보 조회(과거) -->
+	<entry key="selectPartnerSchedule2">
+		SELECT S.SCHEDULE_NO "SCHEDULE_NO", TO_CHAR(SCHEDULE_TIME, 'YYYY-MM-DD HH24') || '시 ~' || (TO_CHAR(SCHEDULE_TIME, 'HH24')+2) || '시' AS "SCHEDULE_TIME", SERVICE_TYPE ,
+		CASE WHEN BOOK_MEMBER > 0	THEN 'Y' ELSE 'N' END "ISBOOK", MEMBER_NM
+		FROM SCHEDULE S
+		LEFT JOIN MEMBER M ON(BOOK_MEMBER = M.MEMBER_NO)	
+		WHERE PARTNER_NO = ?
+		AND SCHEDULE_TIME <![CDATA[<=]]> SYSDATE 
+		ORDER BY 4, 2
+	</entry>
 
+	<!-- 파트너 소개 조회 -->
+	<entry key="selectPartnerInfo">
+		SELECT PARTNER_INTRO, PARTNER_GRADE, MEMBER_NM
+		FROM PARTNER
+		LEFT JOIN MEMBER USING(MEMBER_NO)
+		WHERE MEMBER_NO = ?
+	</entry>
 	
+	
+	<!-- 파트너 소개 조회 -->
+	<entry key="selectDogInfo">
+		SELECT * FROM DOG
+		WHERE DOG_NO = ?
+	</entry>
+	
+	
+	<!-- 반려견 정보 수정 -->
+	<entry key="updateDogInfo">
+		UPDATE DOG SET
+		DOG_NAME = ?,
+		DOG_GENDER = ?,
+		DOG_AGE = ?,
+		DOG_COMMENT = ?,
+		DOG_ALERT = ?,
+		DOG_VAR = ?
+		WHERE DOG_NO = 
+		(SELECT DOG_NO FROM "MEMBER" M WHERE MEMBER_NO = ?)
+	</entry>
+	
+	
+	<!-- 반려견 정보 수정 -->
+	<entry key="updatePartnerInfo">
+		UPDATE PARTNER SET
+		PARTNER_INTRO = ?
+		WHERE MEMBER_NO = ?
+	</entry>
+	
+	
+	<!-- 날짜가 오늘날짜보다 이전인지 여부 조회 -->
+	<entry key="isPast">
+		SELECT 1 FROM DUAL
+		WHERE TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') > SYSDATE
+	</entry>
+	
+	
+	
+	<!-- 파트너-스케줄 등록 -->
+	<entry key="updateSchedule">
+		INSERT INTO SCHEDULE VALUES(
+		SEQ_SCHEDULE_NO.NEXTVAL, 
+		TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), 
+		?, ?, DEFAULT)
+	</entry>
 	
 	
 </properties>
